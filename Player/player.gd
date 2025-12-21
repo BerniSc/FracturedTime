@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 const SPEED = 110.0
-const JUMP_VELOCITY = -400
+const JUMP_VELOCITY = -350
 const REWIND_DURATION_SECS = 2.0
 const BRANCH_RECORD_DURATION_SECS = 2.0
 
@@ -41,6 +41,21 @@ var jmp_cnt := 0
 
 var is_gliding := false
 
+## Walljmp/Glide
+@export var enable_wall_jump := true
+@export var enable_wall_slide := true
+@export var wall_slide_speed := 40.0
+ # X is horizontal push, Y is upward
+@export var wall_jump_velocity := Vector2(100, -250)
+
+# Prevent endless climbing (and ensure momentum of jmp does not get overwritten by user input)
+@export var wall_jump_lock_time_sec := 0.8
+@export var wall_jump_input_lock_time_sec := 0.15
+var wall_jump_lock_timer := 0.0
+var wall_jump_input_lock_timer := 0.0
+
+var is_wall_sliding := false
+var wall_dir := 0 # -1 for left, 1 for right
 
 # /EXPERIMENTAL
 # ==================================
@@ -53,8 +68,25 @@ func _physics_process(delta):
 		rewind_step()
 		return
 
+	# Update lock-timers
+	if wall_jump_lock_timer > 0.0:
+		wall_jump_lock_timer -= delta
+	if wall_jump_input_lock_timer > 0.0:
+		wall_jump_input_lock_timer -= delta
+
+
 	# Record current state
 	record_state()
+
+	# Wall slide logic
+	is_wall_sliding = false
+	wall_dir = 0
+	if enable_wall_slide and not is_on_floor() and is_on_wall() and wall_jump_lock_timer <= 0.0:
+		wall_dir = get_wall_direction()
+		if velocity.y > 0:
+			is_wall_sliding = true
+			velocity.y = min(velocity.y, wall_slide_speed)
+
 
 	# Add gravity or glide
 	if not is_on_floor():
@@ -73,17 +105,31 @@ func _physics_process(delta):
 		jmp_cnt = 0
 
 	# Handle Jump and doublejmp (if configured)
+	# And also walljmp (if configured)
 	if Input.is_action_just_pressed("ui_accept"):
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
 			jmp_cnt = 1
-		elif enable_double_jmps and jmp_cnt < max_jmps:
+		elif enable_double_jmps and jmp_cnt < max_jmps and not is_wall_sliding:
 			velocity.y = JUMP_VELOCITY * 0.75;
 			jmp_cnt += 1
+		elif enable_wall_jump and is_wall_sliding:
+			velocity.y = wall_jump_velocity.y
+			# away from wall -> Dir can flip
+			velocity.x = wall_jump_velocity.x * -wall_dir
+			is_wall_sliding = false
+			jmp_cnt = 1 # Reset jumpcount after walljump
+			# Prevent Wallslide for a moment
+			wall_jump_lock_timer = wall_jump_lock_time_sec
+			# Prevent input override
+			wall_jump_input_lock_timer = wall_jump_input_lock_time_sec
 
 	# Get the input direction (input_axis) and handle the movement/deceleration.
 	var input_axis = Input.get_axis("ui_left", "ui_right")
-	if input_axis:
+	if wall_jump_input_lock_timer > 0.0:
+		# Ignore horizontal input after wall jump
+		pass
+	elif input_axis:
 		velocity.x = input_axis * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
@@ -120,17 +166,6 @@ func rewind_step():
 	velocity = state["velocity"]
 	animated_sprite_2d.animation = state["animation"]
 	animated_sprite_2d.flip_h = state["flip_h"]
-
-
-func update_animations(input_axis):
-	if input_axis != 0:
-		animated_sprite_2d.flip_h = input_axis < 0
-		animated_sprite_2d.play("run")
-	else:
-		animated_sprite_2d.play("idle")
-		
-	if not is_on_floor():
-		animated_sprite_2d.play("jump")
 
 func start_branch():
 	is_frozen = true
@@ -199,3 +234,31 @@ func _on_clone_done(clone):
 		# Restore player
 		animated_sprite_2d.modulate.a = 1.0
 		set_physics_process(true)
+
+func get_wall_direction() -> int:
+	# Returns -1 if touching left wall, 1 if right wall, 0 otherwise
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		if collision and collision.get_normal().x > 0.9:
+			return -1 # Wall on left
+		elif collision and collision.get_normal().x < -0.9:
+			return 1 # Wall on right
+	return 0
+
+func update_animations(input_axis):
+	var coolcounter := 0
+	if is_wall_sliding:
+		# TODO Stub, should have implemented this
+		coolcounter += 1
+	elif is_gliding:
+		# TODO Stub, should have implemented this
+		coolcounter += 1
+	if input_axis != 0:
+		animated_sprite_2d.flip_h = input_axis < 0
+		animated_sprite_2d.play("run")
+	else:
+		animated_sprite_2d.play("idle")
+
+	# TODO and is not gliding and is not sliding
+	if not is_on_floor():
+		animated_sprite_2d.play("jump")
