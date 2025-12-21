@@ -21,6 +21,22 @@ var is_frozen = false
 const MAX_CLONES = 5
 var active_clones = []
 
+# ==================================
+# EXPERIMENTAL
+# This is for configuring platforming (also via Inspector)
+# prototyping which movements we allow. More is more fun, but harder to work around^^
+
+## Double Jump
+# use typed asignments instead of loose non-enforcing assignment
+# TODO refactor rest to use theese as well
+@export var enable_double_jmps := true
+@export var max_jmps := 2
+
+var jmp_cnt := 0
+
+# /EXPERIMENTAL
+# ==================================
+
 func _physics_process(delta):
 	if is_frozen:
 		return
@@ -36,9 +52,19 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	# Reset jump count when on floor
+	if is_on_floor():
+		jmp_cnt = 0
+
+
+	# Handle Jump and doublejmp (if configured)
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+			jmp_cnt = 1
+		elif enable_double_jmps and jmp_cnt < max_jmps:
+			velocity.y = JUMP_VELOCITY * 0.75;
+			jmp_cnt += 1
 
 	# Get the input direction (input_axis) and handle the movement/deceleration.
 	var input_axis = Input.get_axis("ui_left", "ui_right")
