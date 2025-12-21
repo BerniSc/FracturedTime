@@ -10,7 +10,7 @@ var rewinding = false
 
 func _ready():
 	set_physics_process(true)
-	animated_sprite_2d.modulate.a = 0.7
+	animated_sprite_2d.modulate.a = 0.5
 
 func _physics_process(delta):
 	if replay_buffer.size() == 0:

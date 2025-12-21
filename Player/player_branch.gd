@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+# DEPRECATED Just used for testing old logic
+
 signal branch_finished(branch_player, buffer, end_position)
 
 var record_duration = 2.0
@@ -29,16 +31,15 @@ func record_state():
 	buffer.push_back(state)
 
 func handle_input(delta):
-	# Copy your movement/jump logic from player.gd here
 	if not is_on_floor():
 		velocity.y += ProjectSettings.get_setting("physics/2d/default_gravity") * delta
 
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = -400 # Or use your JUMP_VELOCITY
+		velocity.y = -400
 
 	var input_axis = Input.get_axis("ui_left", "ui_right")
 	if input_axis:
-		velocity.x = input_axis * 110.0 # Or use your SPEED
+		velocity.x = input_axis * 110.0
 	else:
 		velocity.x = move_toward(velocity.x, 0, 110.0)
 

@@ -5,6 +5,8 @@ const JUMP_VELOCITY = -350
 const REWIND_DURATION_SECS = 2.0
 const BRANCH_RECORD_DURATION_SECS = 2.0
 
+signal branch_finished(branch_player, buffer, end_position)
+
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -74,7 +76,6 @@ func _physics_process(delta):
 	if wall_jump_input_lock_timer > 0.0:
 		wall_jump_input_lock_timer -= delta
 
-
 	# Record current state
 	record_state()
 
@@ -137,6 +138,16 @@ func _physics_process(delta):
 	move_and_slide()
 	update_animations(input_axis)
 
+	# Dont allow rewind or branch on clone for now
+	if is_branching:
+		branch_timer += delta
+		record_branch_state()
+		if branch_timer >= BRANCH_RECORD_DURATION_SECS:
+			is_branching = false
+			emit_signal("branch_finished", self, branch_buffer, position)
+			queue_free()
+		return
+
 	# Check for rewind shortcut
 	if Input.is_action_just_pressed("rewind"):
 		is_rewinding = true
@@ -173,12 +184,20 @@ func start_branch():
 	set_physics_process(false)
 	
 	# Spawn branch player
-	var branch_scene = preload("res://Player/player_branch.tscn")
-	var branch_player = branch_scene.instantiate()
+	var player_scene = preload("res://Player/player.tscn")
+	var branch_player = player_scene.instantiate()
 	branch_player.position = position
-	branch_player.record_duration = BRANCH_RECORD_DURATION_SECS
+	branch_player.set_as_branch_player()
 	get_parent().add_child(branch_player)
 	branch_player.connect("branch_finished", Callable(self, "_on_branch_finished"))
+
+func set_as_branch_player():
+	# Called when this instance is used as a branch player
+	self.is_branching = true
+	self.branch_timer = 0.0
+	self.branch_buffer = []
+	self.connect("branch_finished", Callable(self, "_on_branch_finished"))
+	set_physics_process(true)
 
 func record_branch_state():
 	var state = {
@@ -204,8 +223,9 @@ func spawn_branch_clone(buffer):
 	clone.connect("clone_finished", Callable(self, "_on_clone_done"))
 	
 func _on_branch_finished(branch_player, buffer, end_position):
-	# Fade in and move to new position
-	position = end_position
+	# Fade in
+	# TODO and move to new position?
+	# position = end_position
 	animated_sprite_2d.modulate.a = 1.0
 	set_physics_process(true)
 	is_frozen = false
