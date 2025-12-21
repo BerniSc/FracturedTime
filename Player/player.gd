@@ -34,6 +34,14 @@ var active_clones = []
 
 var jmp_cnt := 0
 
+## Glide
+@export var enable_glide := true
+# Slow down gravity -> less means slower fall
+@export var glide_gravity_scale := 0.2
+
+var is_gliding := false
+
+
 # /EXPERIMENTAL
 # ==================================
 
@@ -48,14 +56,21 @@ func _physics_process(delta):
 	# Record current state
 	record_state()
 
-	# Add the gravity.
+	# Add gravity or glide
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		if enable_glide and Input.is_action_pressed("ui_accept") and velocity.y > 0:
+			is_gliding = true
+			velocity.y += gravity * glide_gravity_scale * delta
+		else:
+			is_gliding = false
+			velocity.y += gravity * delta
+	else:
+		is_gliding = false
+
 
 	# Reset jump count when on floor
 	if is_on_floor():
 		jmp_cnt = 0
-
 
 	# Handle Jump and doublejmp (if configured)
 	if Input.is_action_just_pressed("ui_accept"):
