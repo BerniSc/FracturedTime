@@ -1,0 +1,76 @@
+[gd_scene load_steps=11 format=3 uid="uid://hvw2tjk7rxpp"]
+
+[ext_resource type="Script" uid="uid://50rkg1nhrchv" path="res://Enemies/Oposum/oposum.gd" id="1_3m2ad"]
+[ext_resource type="Texture2D" uid="uid://b3qsnu86qjb8v" path="res://Enemies/Oposum/oposum.png" id="1_dpmf7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ocnlb"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(0, 0, 36, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6f4tl"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(36, 0, 36, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khukr"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(72, 0, 36, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc3mw"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(108, 0, 36, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0xm8g"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(144, 0, 36, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kweho"]
+atlas = ExtResource("1_dpmf7")
+region = Rect2(180, 0, 36, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fblae"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ocnlb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6f4tl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khukr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc3mw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0xm8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kweho")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_igoil"]
+
+[node name="Oposum" type="CharacterBody2D"]
+collision_layer = 0
+script = ExtResource("1_3m2ad")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fblae")
+animation = &"new_animation"
+autoplay = "new_animation"
+frame_progress = 0.633067
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_igoil")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

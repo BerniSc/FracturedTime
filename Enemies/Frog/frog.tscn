@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=3 uid="uid://bttsjij0ss8q0"]
+
+[ext_resource type="Script" path="res://Enemies/Frog/frog.gd" id="1_5fl31"]
+[ext_resource type="Texture2D" uid="uid://m7jx3eb2ey3e" path="res://Enemies/Frog/frog-jump.png" id="1_ld22g"]
+[ext_resource type="Texture2D" uid="uid://dbaymly2fej4i" path="res://Enemies/Frog/frog-idle.png" id="1_x3351"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4c8v2"]
+atlas = ExtResource("1_ld22g")
+region = Rect2(70, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdygb"]
+atlas = ExtResource("1_x3351")
+region = Rect2(0, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7lnah"]
+atlas = ExtResource("1_x3351")
+region = Rect2(35, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ymcb"]
+atlas = ExtResource("1_x3351")
+region = Rect2(70, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l2k3k"]
+atlas = ExtResource("1_x3351")
+region = Rect2(105, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4m8vy"]
+atlas = ExtResource("1_ld22g")
+region = Rect2(35, 0, 35, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a0eiy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4c8v2")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdygb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7lnah")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ymcb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l2k3k")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4m8vy")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0kx4j"]
+
+[node name="Frog" type="CharacterBody2D"]
+collision_layer = 0
+script = ExtResource("1_5fl31")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_a0eiy")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_0kx4j")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
