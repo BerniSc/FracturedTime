@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://hmixrwpermrr"]
+
+[ext_resource type="Script" uid="uid://dk7u32cfspe31" path="res://Interactable/switch.gd" id="1_kdduv"]
+[ext_resource type="Texture2D" uid="uid://bri1uoswo4atq" path="res://World/Props/crank-up.png" id="2_8fp4k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdduv"]
+
+[node name="Switch" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_kdduv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_8fp4k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_kdduv")
