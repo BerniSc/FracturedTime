@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dxctyex7uqcv7"]
+[gd_scene load_steps=23 format=3 uid="uid://dxctyex7uqcv7"]
 
 [ext_resource type="PackedScene" uid="uid://bcsnyw4t6pnw2" path="res://World/parallax_background.tscn" id="1_fu3r7"]
 [ext_resource type="Texture2D" uid="uid://2yk0n7w5f8jv" path="res://World/Props/tree.png" id="2_li650"]
@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://cewt171s35pmt" path="res://Pickups/Gem/gem.tscn" id="18_y556w"]
 [ext_resource type="PackedScene" uid="uid://c6diiunn70psp" path="res://Pickups/Cheery/cherry.tscn" id="19_1of2v"]
 [ext_resource type="PackedScene" uid="uid://hvw2tjk7rxpp" path="res://Enemies/Oposum/oposum.tscn" id="20_1of2v"]
+[ext_resource type="PackedScene" uid="uid://hmixrwpermrr" path="res://Interactable/switch.tscn" id="21_cowqa"]
+[ext_resource type="PackedScene" uid="uid://dfn5qebk7pstm" path="res://Enemies/Spikes/spikes.tscn" id="22_qw2jh"]
 
 [node name="WorldTest" type="Node2D"]
 
@@ -157,3 +159,12 @@ position = Vector2(192, 152)
 
 [node name="Oposum" parent="." instance=ExtResource("20_1of2v")]
 position = Vector2(912, 176)
+
+[node name="Switch" parent="." instance=ExtResource("21_cowqa")]
+position = Vector2(144, 184)
+auto_reset_time = 1.0
+
+[node name="Spikes" parent="." instance=ExtResource("22_qw2jh")]
+position = Vector2(208, 176)
+
+[connection signal="state_changed" from="Switch" to="Spikes" method="_on_change_spikestate"]
