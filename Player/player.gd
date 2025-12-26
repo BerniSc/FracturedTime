@@ -72,6 +72,14 @@ func clear_current_interactable(interactable):
 	if current_interactable == interactable:
 		current_interactable = null
 
+func _ready():
+	call_deferred("_connect_spike_signals")
+
+func _connect_spike_signals():
+	for spike in get_tree().get_nodes_in_group("spikes"):
+		spike.connect("touched_spike", func(foo): print("DEAD!"))
+	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
+
 func _physics_process(delta):
 	if is_frozen:
 		return

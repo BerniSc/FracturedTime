@@ -11,7 +11,10 @@ var base_position: Vector2
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var shader = sprite.material as ShaderMaterial
 
+signal touched_spike(body)
+
 func _ready():
+	add_to_group("spikes")
 	base_position = position
 	body_entered.connect(_on_body_entered)
 
