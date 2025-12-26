@@ -204,13 +204,13 @@ func start_branch():
 	branch_player.position = position
 	branch_player.set_as_branch_player()
 	get_parent().add_child(branch_player)
+	branch_player.connect("branch_finished", Callable(self, "_on_branch_finished"))
 
 func set_as_branch_player():
 	# Called when this instance is used as a branch player
 	self.is_branching = true
 	self.branch_timer = 0.0
 	self.branch_buffer = []
-	self.connect("branch_finished", Callable(self, "_on_branch_finished"))
 	set_physics_process(true)
 
 func record_branch_state():
