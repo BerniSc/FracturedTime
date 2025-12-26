@@ -30,14 +30,16 @@ func _input(event):
 
 func _on_body_entered(body):
 	# Simple check if it's the player
-	if body.has_method("get_wall_direction"):
+	if body.has_method("set_current_interactable"):
+		body.set_current_interactable(self)
 		is_player_in_range = true
 		if prompt_label:
 			prompt_label.visible = true
 
 func _on_body_exited(body):
 	# Simple check if it's the player
-	if body.has_method("get_wall_direction"):
+	if body.has_method("clear_current_interactable"):
+		body.clear_current_interactable(self)
 		is_player_in_range = false
 		if prompt_label:
 			prompt_label.visible = false

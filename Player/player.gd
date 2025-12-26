@@ -62,6 +62,16 @@ var wall_dir := 0 # -1 for left, 1 for right
 # /EXPERIMENTAL
 # ==================================
 
+# Record interactables so we can replay their actions
+var current_interactable: BaseInteractable = null
+
+func set_current_interactable(interactable):
+	current_interactable = interactable
+
+func clear_current_interactable(interactable):
+	if current_interactable == interactable:
+		current_interactable = null
+
 func _physics_process(delta):
 	if is_frozen:
 		return
@@ -138,10 +148,14 @@ func _physics_process(delta):
 	move_and_slide()
 	update_animations(input_axis)
 
+	# Interactions get handled by interactables and signals are thrown
+
 	# Dont allow rewind or branch on clone for now
 	if is_branching:
 		branch_timer += delta
 		record_branch_state()
+		if Input.is_action_just_pressed("ui_interact"):
+			branch_buffer.back().interact = current_interactable
 		if branch_timer >= BRANCH_RECORD_DURATION_SECS:
 			is_branching = false
 			emit_signal("branch_finished", self, branch_buffer, position)
@@ -161,7 +175,8 @@ func record_state():
 		"position": position,
 		"velocity": velocity,
 		"animation": animated_sprite_2d.animation,
-		"flip_h": animated_sprite_2d.flip_h
+		"flip_h": animated_sprite_2d.flip_h,
+		"interact": null  # will be set if interaction happened in frame
 	}
 	state_buffer.push_front(state)
 	if state_buffer.size() > buffer_max_frames:
@@ -189,7 +204,6 @@ func start_branch():
 	branch_player.position = position
 	branch_player.set_as_branch_player()
 	get_parent().add_child(branch_player)
-	branch_player.connect("branch_finished", Callable(self, "_on_branch_finished"))
 
 func set_as_branch_player():
 	# Called when this instance is used as a branch player
@@ -204,14 +218,16 @@ func record_branch_state():
 		"position": position,
 		"velocity": velocity,
 		"animation": animated_sprite_2d.animation,
-		"flip_h": animated_sprite_2d.flip_h
+		"flip_h": animated_sprite_2d.flip_h,
+		"interact": null  # will be set if interaction happened in frame
 	}
 	branch_buffer.push_back(state)
+
 
 func end_branch():
 	is_branching = false
 	animated_sprite_2d.modulate.a = 1.0 # Fade in
-	spawn_branch_clone(branch_buffer.duplicate())
+	branch_buffer.clear()
 
 func spawn_branch_clone(buffer):
 	var clone_scene = preload("res://Player/player_clone.tscn")
@@ -230,23 +246,6 @@ func _on_branch_finished(branch_player, buffer, end_position):
 	set_physics_process(true)
 	is_frozen = false
 	spawn_branch_clone(buffer)
-
-func branch_clone():
-	# Fade out and freeze player
-	animated_sprite_2d.modulate.a = 0.3	 # Alpha = 0.3
-	set_physics_process(false)
-	
-	# Instance and setup clone
-	var clone_scene = preload("res://Player/player_clone.tscn")
-	var clone = clone_scene.instantiate()
-	clone.position = position
-	clone.replay_buffer = state_buffer.duplicate()
-	# Instantiate the clone in our worldscene or at least same scene where player lives too
-	get_parent().add_child(clone)
-	active_clones.append(clone)
-	
-	# Connect signal to restore when done
-	clone.connect("clone_finished", Callable(self, "_on_clone_done"))
 
 func _on_clone_done(clone):
 	active_clones.erase(clone)
