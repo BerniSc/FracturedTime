@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt8gb54hjkhl1"
-path="res://.godot/imported/player.png-e0de26b393baa489289b0e229c9561a8.ctex"
+uid="uid://f0f2vbr46qw6"
+path="res://.godot/imported/pirat_skelette.png-e639b036cada60673c61b41e69f1ec0d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/player.png"
-dest_files=["res://.godot/imported/player.png-e0de26b393baa489289b0e229c9561a8.ctex"]
+source_file="res://Player/pirat_skelette.png"
+dest_files=["res://.godot/imported/pirat_skelette.png-e639b036cada60673c61b41e69f1ec0d.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt8gb54hjkhl1"
-path="res://.godot/imported/player.png-e0de26b393baa489289b0e229c9561a8.ctex"
+uid="uid://cqyeqtgdjavyi"
+path="res://.godot/imported/middel_2.png-3dafa47980abf0c1664598cd6c87f66d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Player/player.png"
-dest_files=["res://.godot/imported/player.png-e0de26b393baa489289b0e229c9561a8.ctex"]
+source_file="res://World/Background/middel_2.png"
+dest_files=["res://.godot/imported/middel_2.png-3dafa47980abf0c1664598cd6c87f66d.ctex"]
 
 [params]
 
