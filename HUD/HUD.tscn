@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvkw2l7qbtexp"]
+
+[ext_resource type="FontFile" uid="uid://ddck2jm3g6tit" path="res://Font/IslandMoments/IslandMoments-Regular.ttf" id="1_f31rt"]
+
+[node name="Hud" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 3.0
+offset_right = 43.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("1_f31rt")
+text = "Fractured Time -> TODO Add real text here"

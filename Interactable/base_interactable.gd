@@ -9,6 +9,7 @@ signal state_changed(new_state)
 @export var interaction_prompt := "Press F to interact"
 @export var is_one_time_use := false
 @export var requires_player_input := true
+@export var display_label := true
 
 var is_player_in_range := false
 var has_been_used := false
@@ -33,7 +34,7 @@ func _on_body_entered(body):
 	if body.has_method("set_current_interactable"):
 		body.set_current_interactable(self)
 		is_player_in_range = true
-		if prompt_label:
+		if prompt_label and display_label:
 			prompt_label.visible = true
 
 func _on_body_exited(body):
@@ -41,7 +42,7 @@ func _on_body_exited(body):
 	if body.has_method("clear_current_interactable"):
 		body.clear_current_interactable(self)
 		is_player_in_range = false
-		if prompt_label:
+		if prompt_label and display_label:
 			prompt_label.visible = false
 
 func interact():
