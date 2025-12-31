@@ -6,6 +6,9 @@ var replay_buffer = []
 var replay_index = 0
 var rewinding = false
 
+# TODO Use
+var slot_idx
+
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 func _ready():

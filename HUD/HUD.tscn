@@ -1,10 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvkw2l7qbtexp"]
+[gd_scene load_steps=4 format=3 uid="uid://dvkw2l7qbtexp"]
 
+[ext_resource type="Script" uid="uid://8n2v0qh16ht2" path="res://HUD/hud.gd" id="1_amwvk"]
 [ext_resource type="FontFile" uid="uid://ddck2jm3g6tit" path="res://Font/IslandMoments/IslandMoments-Regular.ttf" id="1_f31rt"]
+[ext_resource type="PackedScene" uid="uid://s406uyvkfemx" path="res://HUD/CloneFrame.tscn" id="3_ja1d4"]
 
 [node name="Hud" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_amwvk")
+frame_scene = ExtResource("3_ja1d4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
