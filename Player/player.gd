@@ -146,7 +146,7 @@ func _physics_process(delta):
 			# away from wall -> Dir can flip
 			velocity.x = wall_jump_velocity.x * -wall_dir
 			is_wall_sliding = false
-			jmp_cnt = 1 # Reset jumpcount after walljump
+			#jmp_cnt = 1 # Reset jumpcount after walljump
 			# Prevent Wallslide for a moment
 			wall_jump_lock_timer = wall_jump_lock_time_sec
 			# Prevent input override
