@@ -12,6 +12,7 @@ shader_parameter/extension = 0.0
 size = Vector2(16, 10)
 
 [node name="Spikes" type="Area2D"]
+z_index = -1
 collision_mask = 3
 input_pickable = false
 script = ExtResource("1_xcacv")
