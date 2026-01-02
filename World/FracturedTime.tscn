@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cw88aueowe406"]
+[gd_scene load_steps=12 format=3 uid="uid://cw88aueowe406"]
 
 [ext_resource type="PackedScene" uid="uid://bcsnyw4t6pnw2" path="res://World/parallax_background.tscn" id="1_txm2m"]
 [ext_resource type="TileSet" uid="uid://dgp60fa4r1vdi" path="res://World/world-tileset.tres" id="2_bc520"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://spgmuyuggu76" path="res://Interactable/sign.tscn" id="7_lfl7x"]
 [ext_resource type="PackedScene" uid="uid://c5765ews0f7ls" path="res://Interactable/door.tscn" id="8_qqh1t"]
 [ext_resource type="PackedScene" uid="uid://cb3pptogrq5rj" path="res://Enemies/Boulder/boulder_stop.tscn" id="10_s5kuk"]
+[ext_resource type="PackedScene" uid="uid://8gcc5ia4tiok" path="res://World/Rooms/challenge1.tscn" id="11_bk3ct"]
 
 [node name="WorldTest" type="Node2D"]
 
@@ -40,6 +41,7 @@ position = Vector2(232, 200)
 
 [node name="1_Spikes" parent="." instance=ExtResource("6_lfl7x")]
 position = Vector2(241, 186)
+auto_extend = true
 
 [node name="2_Spikes" parent="." instance=ExtResource("6_lfl7x")]
 position = Vector2(384, 185)
@@ -49,10 +51,8 @@ start_extended = true
 position = Vector2(153, 182)
 
 [node name="Door" parent="." instance=ExtResource("8_qqh1t")]
-z_index = -1
 position = Vector2(87, 176)
 collision_layer = 0
-collision_mask = 2
 requires_key = true
 
 [node name="Boulder" parent="." instance=ExtResource("5_c0uaj")]
@@ -66,10 +66,20 @@ position = Vector2(117, 184)
 
 [node name="Boulder3" parent="." instance=ExtResource("5_c0uaj")]
 position = Vector2(539, 165)
-initial_impulse = Vector2(10, 0)
 
 [node name="Switch2" parent="." instance=ExtResource("5_eiqj0")]
 position = Vector2(508, 168)
+
+[node name="Door2" parent="." instance=ExtResource("8_qqh1t")]
+position = Vector2(32, 176)
+new_area = ExtResource("11_bk3ct")
+
+[node name="Spikes" parent="." instance=ExtResource("6_lfl7x")]
+position = Vector2(113, 123)
+rotation = 3.1415927
+is_top = true
+auto_extend = true
+auto_extend_delay = 0.5
 
 [connection signal="state_changed" from="Switch" to="1_Spikes" method="_on_change_spikestate"]
 [connection signal="state_changed" from="Switch" to="2_Spikes" method="_on_change_spikestate"]
