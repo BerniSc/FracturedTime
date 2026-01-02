@@ -7,7 +7,7 @@
 radius = 9.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_clqaf"]
-radius = 31.0
+radius = 10.049875
 
 [node name="Boulder" type="RigidBody2D"]
 collision_layer = 4

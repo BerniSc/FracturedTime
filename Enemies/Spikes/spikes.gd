@@ -19,10 +19,12 @@ var base_position: Vector2
 signal touched_spike(body)
 
 @onready var auto_extend_timer: Timer = $AutoExtendTimer
+@onready var auto_retract_timer: Timer = $AutoRetractTimer
 
 @export_group("Autoextend")
 @export var auto_extend := false
-@export var auto_extend_delay: float = 3.0
+@export var duration_extended: float = 3.0
+@export var duration_retracted: float = 2.0
 
 var cur_state_extended = false
 
@@ -37,20 +39,33 @@ func _ready():
 		shader = sprite.material as ShaderMaterial
 	reset_spikes()
 	
-	auto_extend_timer.wait_time = auto_extend_delay
+	auto_extend_timer.wait_time = duration_extended
 	auto_extend_timer.one_shot = false
 	auto_extend_timer.timeout.connect(_on_auto_extend_timer_timeout)
 	
+	auto_retract_timer.wait_time = duration_retracted
+	auto_retract_timer.one_shot = true
+	auto_retract_timer.timeout.connect(_on_auto_retract_timer_timeout)
+	
 	if auto_extend:
-		auto_extend_timer.start()
+		if start_extended:
+			extend()
+			auto_extend_timer.start()
+		else:
+			retract()
+			auto_retract_timer.start()
 	else:
 		auto_extend_timer.stop()
+		auto_retract_timer.stop()
+
 
 func _on_auto_extend_timer_timeout():
-	if cur_state_extended:
-		retract()
-	else:
-		extend()
+	retract()
+	auto_retract_timer.start()
+
+func _on_auto_retract_timer_timeout():
+	extend()
+	auto_extend_timer.start()
 
 func _on_body_entered(body):
 	emit_signal("touched_spike", body)
