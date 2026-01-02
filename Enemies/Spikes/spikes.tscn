@@ -27,3 +27,5 @@ offset = Vector2(0, -1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(8, 5)
 shape = SubResource("RectangleShape2D_rvyjh")
+
+[node name="AutoExtendTimer" type="Timer" parent="."]
