@@ -4,18 +4,40 @@ class_name InteractableDoor
 @export var requires_key := false
 @export var key_item_name := "key"
 
+@export var new_area: PackedScene = null
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var status_msg: Label = $StatusMessage
 @onready var status_timer: Timer = $StatusTimer
-@onready var collision_shape: CollisionShape2D = $StaticBody2D/CollisionShape2D
+
+@onready var player_enter_detector: Area2D = $PlayerEnterDetector 
+
+var player_in_front := false
+var player_ref = null
 
 var is_open := false
-
 func _ready():
 	super._ready()
 	interaction_prompt = "Press F to open door"
 	status_timer.timeout.connect(_on_StatusTimer_timeout)
 	update_visual()
+	player_enter_detector.body_entered.connect(_on_area_body_entered)
+	player_enter_detector.body_exited.connect(_on_area_body_exited)
+
+func _on_area_body_entered(body):
+	if body.is_in_group("player"):
+		player_in_front = true
+		player_ref = body
+
+func _on_area_body_exited(body):
+	if body.is_in_group("player"):
+		player_in_front = false
+		player_ref = null
+
+func _process(delta):
+	if player_in_front and Input.is_action_just_pressed("ui_up") and new_area != null:
+		print("NARNIA")
+		get_tree().change_scene_to_packed(new_area)
 
 func _on_interact(player):
 	if requires_key:
@@ -34,10 +56,6 @@ func toggle_door():
 	current_state = 1 if is_open else 0
 	state_changed.emit(current_state)
 	update_visual()
-	
-	# En/disable collision
-	if collision_shape:
-		collision_shape.disabled = is_open
 
 func update_visual():
 	if sprite:
