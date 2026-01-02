@@ -15,6 +15,29 @@ offset_bottom = 240.0
 texture = ExtResource("1_eh0a4")
 stretch_mode = 1
 
+[node name="TextureRect2" type="TextureRect" parent="ParallaxLayerSky"]
+offset_left = 1482.0
+offset_top = 4.0
+offset_right = 2250.0
+offset_bottom = 244.0
+texture = ExtResource("1_eh0a4")
+stretch_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="ParallaxLayerSky"]
+offset_left = 3003.0
+offset_top = -4.0
+offset_right = 3771.0
+offset_bottom = 236.0
+texture = ExtResource("1_eh0a4")
+stretch_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="ParallaxLayerSky"]
+offset_left = 4520.0
+offset_right = 5288.0
+offset_bottom = 240.0
+texture = ExtResource("1_eh0a4")
+stretch_mode = 1
+
 [node name="ParallaxLayerMiddle" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0.8, 0)
 motion_mirroring = Vector2(880, 0)
@@ -23,5 +46,21 @@ motion_mirroring = Vector2(880, 0)
 offset_top = 100.0
 offset_right = 880.0
 offset_bottom = 468.0
+texture = ExtResource("2_f5pj8")
+stretch_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="ParallaxLayerMiddle"]
+offset_left = 3465.0
+offset_top = 116.0
+offset_right = 4345.0
+offset_bottom = 484.0
+texture = ExtResource("2_f5pj8")
+stretch_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="ParallaxLayerMiddle"]
+offset_left = 1739.0
+offset_top = 108.0
+offset_right = 2619.0
+offset_bottom = 476.0
 texture = ExtResource("2_f5pj8")
 stretch_mode = 1
