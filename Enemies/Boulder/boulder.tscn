@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://buadottpprvki"]
+
+[ext_resource type="Texture2D" uid="uid://u1ftemo14a1q" path="res://World/Props/boulder.png" id="1_4obfo"]
+[ext_resource type="Script" uid="uid://4jfdkvhkt2ec" path="res://Enemies/Boulder/boulder.gd" id="1_clqaf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4obfo"]
+radius = 9.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_clqaf"]
+radius = 31.0
+
+[node name="Boulder" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 3
+mass = 0.069
+script = ExtResource("1_clqaf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+texture = ExtResource("1_4obfo")
+expand_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_4obfo")
+
+[node name="PlayerCollisionArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="PlayerCollider" type="CollisionShape2D" parent="PlayerCollisionArea"]
+shape = SubResource("CircleShape2D_clqaf")

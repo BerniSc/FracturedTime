@@ -1,11 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0idxffsul17l"]
+[gd_scene load_steps=11 format=3 uid="uid://cw88aueowe406"]
 
 [ext_resource type="PackedScene" uid="uid://bcsnyw4t6pnw2" path="res://World/parallax_background.tscn" id="1_txm2m"]
 [ext_resource type="TileSet" uid="uid://dgp60fa4r1vdi" path="res://World/world-tileset.tres" id="2_bc520"]
 [ext_resource type="PackedScene" uid="uid://dvkw2l7qbtexp" path="res://HUD/HUD.tscn" id="3_qmnvl"]
 [ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="4_umfvr"]
+[ext_resource type="PackedScene" uid="uid://buadottpprvki" path="res://Enemies/Boulder/boulder.tscn" id="5_c0uaj"]
 [ext_resource type="PackedScene" uid="uid://hmixrwpermrr" path="res://Interactable/switch.tscn" id="5_eiqj0"]
 [ext_resource type="PackedScene" uid="uid://dfn5qebk7pstm" path="res://Enemies/Spikes/spikes.tscn" id="6_lfl7x"]
+[ext_resource type="PackedScene" uid="uid://spgmuyuggu76" path="res://Interactable/sign.tscn" id="7_lfl7x"]
+[ext_resource type="PackedScene" uid="uid://c5765ews0f7ls" path="res://Interactable/door.tscn" id="8_qqh1t"]
+[ext_resource type="PackedScene" uid="uid://cb3pptogrq5rj" path="res://Enemies/Boulder/boulder_stop.tscn" id="10_s5kuk"]
 
 [node name="WorldTest" type="Node2D"]
 
@@ -24,9 +28,12 @@ position = Vector2(63, 180)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-7, 0)
 limit_left = 0
-limit_top = 0
+limit_top = -100
 limit_right = 3600
 limit_bottom = 240
+position_smoothing_enabled = true
+position_smoothing_speed = 1.0
+rotation_smoothing_enabled = true
 
 [node name="Switch" parent="." instance=ExtResource("5_eiqj0")]
 position = Vector2(232, 200)
@@ -38,5 +45,32 @@ position = Vector2(241, 186)
 position = Vector2(384, 185)
 start_extended = true
 
+[node name="Sign" parent="." instance=ExtResource("7_lfl7x")]
+position = Vector2(153, 182)
+
+[node name="Door" parent="." instance=ExtResource("8_qqh1t")]
+z_index = -1
+position = Vector2(87, 176)
+collision_layer = 0
+collision_mask = 2
+requires_key = true
+
+[node name="Boulder" parent="." instance=ExtResource("5_c0uaj")]
+position = Vector2(449, 170)
+
+[node name="BoulderStop" parent="." instance=ExtResource("10_s5kuk")]
+position = Vector2(277, 202)
+
+[node name="Boulder2" parent="." instance=ExtResource("5_c0uaj")]
+position = Vector2(117, 184)
+
+[node name="Boulder3" parent="." instance=ExtResource("5_c0uaj")]
+position = Vector2(539, 165)
+initial_impulse = Vector2(10, 0)
+
+[node name="Switch2" parent="." instance=ExtResource("5_eiqj0")]
+position = Vector2(508, 168)
+
 [connection signal="state_changed" from="Switch" to="1_Spikes" method="_on_change_spikestate"]
 [connection signal="state_changed" from="Switch" to="2_Spikes" method="_on_change_spikestate"]
+[connection signal="state_changed" from="Switch2" to="Boulder3" method="_on_external_trigger"]
