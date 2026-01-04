@@ -9,7 +9,7 @@ shader = ExtResource("2_sadch")
 shader_parameter/extension = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rvyjh"]
-size = Vector2(13, 9)
+size = Vector2(11, 9)
 
 [node name="Spikes" type="Area2D"]
 z_index = -1

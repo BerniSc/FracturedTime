@@ -41,7 +41,7 @@ func _apply_scaling():
 		area_collision.apply_scale(Vector2(scale_factor, scale_factor))
 
 func _on_detector_body_entered(body):
-	emit_signal("touched_boulder", self)
+	call_deferred("emit_signal", "touched_boulder", self)
 
 func _on_external_trigger(trigger_state):
 	print("TriggerState: ", trigger_state)
@@ -49,6 +49,9 @@ func _on_external_trigger(trigger_state):
 		trigger()
 	else:
 		stop()
+
+func will_kill():
+	return linear_velocity.length() > 1.0 and can_kill
 
 func trigger():
 	if not is_rolling:
@@ -67,8 +70,8 @@ func trigger():
 		is_rolling = true
 		
 func _physics_process(delta):
-	if not freeze and linear_velocity.length() > 10.0:
-		is_rolling = true
+	if not freeze and linear_velocity.length() > 1.0:
+		self.is_rolling = true
 	else:
 		is_rolling = false
 

@@ -84,12 +84,12 @@ func _ready():
 
 func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
-		spike.connect("touched_spike", func(foo): die())
+		spike.connect("touched_spike", func(foo): _on_die(foo))
 	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
 
 func _connect_boulder_signals():
 	for boulder in get_tree().get_nodes_in_group("boulder"):
-		boulder.connect("touched_boulder", func(foo): die())
+		boulder.connect("touched_boulder", func(foo): if foo.will_kill(): _on_die(foo))
 	print("Connected boulders:", get_tree().get_nodes_in_group("boulder"))
 
 
@@ -97,7 +97,7 @@ func _connect_hud_signals():
 	connect("branch_began", Callable(hud, "_on_branch_began"))
 	connect("branch_finished", Callable(hud, "_on_branch_finished"))
 
-func die():
+func _on_die(foo):
 	print("DIED")
 	died_rewind = true
 
