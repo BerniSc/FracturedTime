@@ -16,6 +16,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var state_buffer = []
 var buffer_max_frames = int(REWIND_DURATION_SECS * Engine.get_physics_ticks_per_second())
 var is_rewinding = false
+var died_rewind := false
 
 var is_branching = false
 var branch_timer = 0.0
@@ -83,12 +84,12 @@ func _ready():
 
 func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
-		spike.connect("touched_spike", func(foo): print("DEAD!"))
+		spike.connect("touched_spike", func(foo): die())
 	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
 
 func _connect_boulder_signals():
 	for boulder in get_tree().get_nodes_in_group("boulder"):
-		boulder.connect("touched_boulder", func(foo): print("DEAD!"))
+		boulder.connect("touched_boulder", func(foo): die())
 	print("Connected boulders:", get_tree().get_nodes_in_group("boulder"))
 
 
@@ -96,12 +97,15 @@ func _connect_hud_signals():
 	connect("branch_began", Callable(hud, "_on_branch_began"))
 	connect("branch_finished", Callable(hud, "_on_branch_finished"))
 
+func die():
+	print("DIED")
+	died_rewind = true
 
 func _physics_process(delta):
 	if is_frozen:
 		return
 	
-	if is_rewinding:
+	if is_rewinding or died_rewind:
 		rewind_step()
 		return
 
@@ -196,6 +200,29 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("branch") and clone_count  < GameSettings.MAX_CLONES:
 		start_branch()
 
+func spawn_ghost_from_state(state):
+	var ghost_scene = preload("res://Player/player_ghost.tscn")
+	var ghost = ghost_scene.instantiate()
+	ghost.position = state["position"]
+	get_parent().add_child(ghost)
+	
+	var anim = animated_sprite_2d.animation
+	var frame = animated_sprite_2d.frame
+	var sprite_frames = animated_sprite_2d.sprite_frames
+	var atlas_tex = sprite_frames.get_frame_texture(anim, frame)
+	var region = Rect2()
+	var texture = null
+
+	if atlas_tex is AtlasTexture:
+		texture = atlas_tex.atlas
+		region = atlas_tex.region
+	else:
+		texture = atlas_tex
+		region = Rect2(Vector2.ZERO, texture.get_size())
+	
+	var sprite_offset = animated_sprite_2d.position
+	ghost.call_deferred("setup", texture, region, state["flip_h"], sprite_offset)
+
 func record_state():
 	var state = {
 		"position": position,
@@ -209,11 +236,14 @@ func record_state():
 		state_buffer.pop_back()
 
 func rewind_step():
-	if state_buffer.size() == 0 or not Input.is_action_pressed("rewind"):
+	if state_buffer.size() == 0 or (not Input.is_action_pressed("rewind") and not died_rewind):
 		is_rewinding = false
+		died_rewind = false
 		return
 
+	print("POPPING")
 	var state = state_buffer.pop_front()
+	spawn_ghost_from_state(state)
 	position = state["position"]
 	velocity = state["velocity"]
 	animated_sprite_2d.animation = state["animation"]

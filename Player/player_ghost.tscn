@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqpxbngby0ygr"]
+
+[ext_resource type="Script" uid="uid://dpmm2ssf02eby" path="res://Player/player_ghost.gd" id="1_80537"]
+
+[node name="PlayerGhost" type="Node2D"]
+script = ExtResource("1_80537")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
