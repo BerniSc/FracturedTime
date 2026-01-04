@@ -9,9 +9,11 @@ shader = ExtResource("2_sadch")
 shader_parameter/extension = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rvyjh"]
-size = Vector2(16, 10)
+size = Vector2(13, 9)
 
 [node name="Spikes" type="Area2D"]
+z_index = -1
+collision_layer = 4
 collision_mask = 3
 input_pickable = false
 script = ExtResource("1_xcacv")
@@ -23,5 +25,9 @@ centered = false
 offset = Vector2(0, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(8, 5)
+position = Vector2(7.5, 4.5)
 shape = SubResource("RectangleShape2D_rvyjh")
+
+[node name="AutoExtendTimer" type="Timer" parent="."]
+
+[node name="AutoRetractTimer" type="Timer" parent="."]

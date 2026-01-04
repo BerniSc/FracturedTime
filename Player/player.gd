@@ -74,8 +74,10 @@ func clear_current_interactable(interactable):
 		current_interactable = null
 
 func _ready():
+	add_to_group("player")
 	active_clones.resize(GameSettings.MAX_CLONES)
 	call_deferred("_connect_spike_signals")
+	call_deferred("_connect_boulder_signals")
 	call_deferred("_connect_hud_signals")
 	print(hud)
 
@@ -83,7 +85,13 @@ func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
 		spike.connect("touched_spike", func(foo): print("DEAD!"))
 	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
-	
+
+func _connect_boulder_signals():
+	for boulder in get_tree().get_nodes_in_group("boulder"):
+		boulder.connect("touched_boulder", func(foo): print("DEAD!"))
+	print("Connected boulders:", get_tree().get_nodes_in_group("boulder"))
+
+
 func _connect_hud_signals():
 	connect("branch_began", Callable(hud, "_on_branch_began"))
 	connect("branch_finished", Callable(hud, "_on_branch_finished"))
@@ -146,7 +154,7 @@ func _physics_process(delta):
 			# away from wall -> Dir can flip
 			velocity.x = wall_jump_velocity.x * -wall_dir
 			is_wall_sliding = false
-			jmp_cnt = 1 # Reset jumpcount after walljump
+			#jmp_cnt = 1 # Reset jumpcount after walljump
 			# Prevent Wallslide for a moment
 			wall_jump_lock_timer = wall_jump_lock_time_sec
 			# Prevent input override

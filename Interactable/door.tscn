@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5765ews0f7ls"]
+
+[ext_resource type="FontFile" uid="uid://c4hrombsne8wv" path="res://Font/PressStart2P/PressStart2P-Regular.ttf" id="1_lf7fr"]
+[ext_resource type="Script" uid="uid://sh2cy5o3rw25" path="res://Interactable/door.gd" id="1_mbhxt"]
+[ext_resource type="Texture2D" uid="uid://b584guu0048qd" path="res://World/Props/door.png" id="1_mn567"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xwfky"]
+size = Vector2(22, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mbhxt"]
+font = ExtResource("1_lf7fr")
+font_size = 4
+shadow_size = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mbhxt"]
+size = Vector2(18, 30)
+
+[node name="Door" type="Area2D"]
+z_index = -1
+collision_mask = 2
+script = ExtResource("1_mbhxt")
+interaction_prompt = "Press F to open door"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mn567")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_xwfky")
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -33.0
+offset_right = 20.0
+offset_bottom = -18.0
+theme_override_fonts/font = ExtResource("1_lf7fr")
+theme_override_font_sizes/font_size = 5
+
+[node name="StatusMessage" type="Label" parent="."]
+offset_left = -29.0
+offset_top = -21.0
+offset_right = 20.0
+offset_bottom = 2.0
+label_settings = SubResource("LabelSettings_mbhxt")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusTimer" type="Timer" parent="."]
+
+[node name="PlayerEnterDetector" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerEnterDetector"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_mbhxt")

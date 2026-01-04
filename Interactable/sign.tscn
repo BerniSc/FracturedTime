@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://spgmuyuggu76"]
+
+[ext_resource type="Texture2D" uid="uid://baiw3llc6vqmf" path="res://World/Props/sign.png" id="1_3m565"]
+[ext_resource type="Script" uid="uid://coooufqepch6g" path="res://Interactable/sign.gd" id="1_daxxs"]
+[ext_resource type="FontFile" uid="uid://c4hrombsne8wv" path="res://Font/PressStart2P/PressStart2P-Regular.ttf" id="3_32xle"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_32xle"]
+
+[node name="Sign" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_daxxs")
+sign_font = ExtResource("3_32xle")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -9.0
+offset_top = -10.0
+offset_right = 9.0
+offset_bottom = 10.0
+texture = ExtResource("1_3m565")
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -20.0
+offset_top = -27.0
+offset_right = 20.0
+offset_bottom = -12.0
+theme_override_fonts/font = ExtResource("3_32xle")
+theme_override_font_sizes/font_size = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_32xle")
