@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlgb1cky25vxy"]
+
+[ext_resource type="Script" uid="uid://cq5ohg2m27tk1" path="res://Interactable/trigger_zone.gd" id="1_rxlqv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_el3vm"]
+
+[node name="TriggerZone" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_rxlqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_el3vm")
