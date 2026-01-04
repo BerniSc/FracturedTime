@@ -28,7 +28,8 @@
 
 [node name="ParallaxBackground" parent="." instance=ExtResource("1_fu3r7")]
 
-[node name="Hud" parent="." instance=ExtResource("2_yyaay")]
+[node name="HUD" parent="." instance=ExtResource("2_yyaay")]
+player_sprite_texture = ExtResource("13_virf4")
 
 [node name="Props" type="Node2D" parent="."]
 

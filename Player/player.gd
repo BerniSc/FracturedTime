@@ -5,9 +5,11 @@ const JUMP_VELOCITY = -350
 const REWIND_DURATION_SECS = 2.0
 const BRANCH_RECORD_DURATION_SECS = 2.0
 
-signal branch_finished(branch_player, buffer, end_position)
+signal branch_began(slot_index)
+signal branch_finished(branch_player, buffer, end_position, slot_index)
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
+@onready var hud = get_node("/root/WorldTest/HUD")
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -20,7 +22,6 @@ var branch_timer = 0.0
 var branch_buffer = []
 
 var is_frozen = false
-const MAX_CLONES = 5
 var active_clones = []
 
 # ==================================
@@ -73,12 +74,20 @@ func clear_current_interactable(interactable):
 		current_interactable = null
 
 func _ready():
+	active_clones.resize(GameSettings.MAX_CLONES)
 	call_deferred("_connect_spike_signals")
+	call_deferred("_connect_hud_signals")
+	print(hud)
 
 func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
 		spike.connect("touched_spike", func(foo): print("DEAD!"))
 	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
+	
+func _connect_hud_signals():
+	connect("branch_began", Callable(hud, "_on_branch_began"))
+	connect("branch_finished", Callable(hud, "_on_branch_finished"))
+
 
 func _physics_process(delta):
 	if is_frozen:
@@ -166,7 +175,7 @@ func _physics_process(delta):
 			branch_buffer.back().interact = current_interactable
 		if branch_timer >= BRANCH_RECORD_DURATION_SECS:
 			is_branching = false
-			emit_signal("branch_finished", self, branch_buffer, position)
+			emit_signal("branch_finished", self, branch_buffer, position, hud.selected_slot)
 			queue_free()
 		return
 
@@ -175,7 +184,8 @@ func _physics_process(delta):
 		is_rewinding = true
 	
 	# Branch shortcut (spawn clone)
-	if Input.is_action_just_pressed("branch") and active_clones.size() < MAX_CLONES:
+	var clone_count = active_clones.count(func(c): return c != null)
+	if Input.is_action_just_pressed("branch") and clone_count  < GameSettings.MAX_CLONES:
 		start_branch()
 
 func record_state():
@@ -205,6 +215,8 @@ func start_branch():
 	is_frozen = true
 	animated_sprite_2d.modulate.a = 0.3 # Fade out
 	set_physics_process(false)
+	
+	emit_signal("branch_began", hud.selected_slot)
 	
 	# Spawn branch player
 	var player_scene = preload("res://Player/player.tscn")
@@ -238,15 +250,26 @@ func end_branch():
 	branch_buffer.clear()
 
 func spawn_branch_clone(buffer):
+	var slot = hud.selected_slot
+	
+	# Remove existing clone in this slot if it exists
+	if active_clones[slot]:
+		active_clones[slot].queue_free()
+		active_clones[slot] = null
+
+	# Create and add new clone
 	var clone_scene = preload("res://Player/player_clone.tscn")
 	var clone = clone_scene.instantiate()
 	clone.position = buffer[0]["position"]
 	clone.replay_buffer = buffer
+	clone.slot_idx = slot
 	get_parent().add_child(clone)
-	active_clones.append(clone)
-	clone.connect("clone_finished", Callable(self, "_on_clone_done"))
+	active_clones[slot] = clone
 	
-func _on_branch_finished(branch_player, buffer, end_position):
+	clone.connect("clone_finished", Callable(self, "_on_clone_done"))
+	# hud.set_slot_occupied(slot, true)
+	
+func _on_branch_finished(branch_player, buffer, end_position, selected_slot_idx):
 	# Fade in
 	# TODO and move to new position?
 	# position = end_position
@@ -255,6 +278,7 @@ func _on_branch_finished(branch_player, buffer, end_position):
 	is_frozen = false
 	spawn_branch_clone(buffer)
 
+# TODO @Deprecation?
 func _on_clone_done(clone):
 	active_clones.erase(clone)
 	if active_clones.size() == 0:
