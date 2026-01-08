@@ -60,6 +60,7 @@ var wall_jump_input_lock_timer := 0.0
 
 var is_wall_sliding := false
 var wall_dir := 0 # -1 for left, 1 for right
+var last_wall_dir := 0
 
 # /EXPERIMENTAL
 # ==================================
@@ -120,13 +121,11 @@ func _physics_process(delta):
 
 	# Wall slide logic
 	is_wall_sliding = false
-	wall_dir = 0
-	if enable_wall_slide and not is_on_floor() and is_on_wall() and wall_jump_lock_timer <= 0.0:
-		wall_dir = get_wall_direction()
+	wall_dir = get_wall_direction()
+	if enable_wall_slide and not is_on_floor() and is_on_wall():
+		is_wall_sliding = true
 		if velocity.y > 0:
-			is_wall_sliding = true
 			velocity.y = min(velocity.y, wall_slide_speed)
-
 
 	# Add gravity or glide
 	if not is_on_floor():
@@ -150,19 +149,25 @@ func _physics_process(delta):
 		if is_on_floor():
 			velocity.y = JUMP_VELOCITY
 			jmp_cnt = 1
+			last_wall_dir = 0
 		elif enable_double_jmps and jmp_cnt < max_jmps and not is_wall_sliding:
 			velocity.y = JUMP_VELOCITY * 0.75;
 			jmp_cnt += 1
-		elif enable_wall_jump and is_wall_sliding:
-			velocity.y = wall_jump_velocity.y
-			# away from wall -> Dir can flip
-			velocity.x = wall_jump_velocity.x * -wall_dir
-			is_wall_sliding = false
-			#jmp_cnt = 1 # Reset jumpcount after walljump
-			# Prevent Wallslide for a moment
-			wall_jump_lock_timer = wall_jump_lock_time_sec
-			# Prevent input override
-			wall_jump_input_lock_timer = wall_jump_input_lock_time_sec
+		elif enable_wall_jump and is_wall_sliding and wall_dir != 0:
+			if wall_dir != last_wall_dir or wall_jump_lock_timer <= 0.0:
+				velocity.y = wall_jump_velocity.y
+				# away from wall -> Dir can flip
+				velocity.x = wall_jump_velocity.x * -wall_dir
+				# Prevent onesided Wallclimbs
+				last_wall_dir = wall_dir
+				is_wall_sliding = false
+				#jmp_cnt = 1 # Reset jumpcount after walljump
+				# Prevent OneSided Walljumps for a moment
+				wall_jump_lock_timer = wall_jump_lock_time_sec
+				# Prevent input override
+				wall_jump_input_lock_timer = wall_jump_input_lock_time_sec
+			else:
+				pass
 
 	# Get the input direction (input_axis) and handle the movement/deceleration.
 	var input_axis = Input.get_axis("ui_left", "ui_right")
