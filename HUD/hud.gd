@@ -10,6 +10,9 @@ var slot_states = []
 var selected_slot := GameSettings.MAX_CLONES - 1
 
 func _ready():
+	if !GameState.branch_allowed:
+		return
+	
 	var max_clones = GameSettings.MAX_CLONES
 	var spacing = 2
 
@@ -81,7 +84,7 @@ func update_frames():
 				frame_nodes[i].self_modulate = Color(1, 1, 1, 1)
 
 func _input(event):
-	if event is InputEventKey and event.pressed:
+	if GameState.branch_allowed and event is InputEventKey and event.pressed:
 		# Check if key is numberkey (1-9)
 		var key_num = event.keycode - KEY_1
 		if key_num >= 0 and key_num < frame_nodes.size():

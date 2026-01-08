@@ -88,7 +88,7 @@ func _ready():
 	
 func _exit_tree():
 	# Reset respawn position when scene is exited
-	GameState.respawn_position = null
+	GameState.checkpoint_position = null
 
 func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
@@ -197,6 +197,10 @@ func _physics_process(delta):
 	update_animations(input_axis)
 
 	# Interactions get handled by interactables and signals are thrown
+
+	# if we do not yet have "time" unlocked exit early here to prevent it
+	if !GameState.branch_allowed:
+		return
 
 	# Dont allow rewind or branch on clone for now
 	if is_branching:
