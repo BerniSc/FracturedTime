@@ -11,6 +11,8 @@ signal touched_boulder(boulder)
 
 @export var scale_factor := 1.0
 
+@export var rewind_death: bool = true
+
 var is_rolling := false
 
 func _ready():
@@ -41,6 +43,8 @@ func _apply_scaling():
 		area_collision.apply_scale(Vector2(scale_factor, scale_factor))
 
 func _on_detector_body_entered(body):
+	# Only player connected, no need to check if touched body is player
+	# TODO good style this way? Rethink!
 	call_deferred("emit_signal", "touched_boulder", self)
 
 func _on_external_trigger(trigger_state):

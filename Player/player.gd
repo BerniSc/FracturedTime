@@ -10,6 +10,7 @@ signal branch_finished(branch_player, buffer, end_position, slot_index)
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
 @onready var hud = get_node("/root/WorldTest/HUD")
+@onready var iframe_timer: Timer = $IFrameTimer
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -41,7 +42,7 @@ var jmp_cnt := 0
 ## Glide
 @export var enable_glide := true
 # Slow down gravity -> less means slower fall
-@export var glide_gravity_scale := 0.2
+@export var glide_gravity_scale := 0.1
 
 var is_gliding := false
 
@@ -75,32 +76,45 @@ func clear_current_interactable(interactable):
 	if current_interactable == interactable:
 		current_interactable = null
 
+var can_die := false
+
 func _ready():
 	add_to_group("player")
 	active_clones.resize(GameSettings.MAX_CLONES)
 	call_deferred("_connect_spike_signals")
 	call_deferred("_connect_boulder_signals")
 	call_deferred("_connect_hud_signals")
-	print(hud)
+	iframe_timer.timeout.connect(func(): can_die = true)
+	
+func _exit_tree():
+	# Reset respawn position when scene is exited
+	GameState.respawn_position = null
 
 func _connect_spike_signals():
 	for spike in get_tree().get_nodes_in_group("spikes"):
-		spike.connect("touched_spike", func(foo): _on_die(foo))
+		spike.connect("touched_spike", func(spike): _on_die(spike))
 	print("Connected spikes:", get_tree().get_nodes_in_group("spikes"))
 
 func _connect_boulder_signals():
 	for boulder in get_tree().get_nodes_in_group("boulder"):
-		boulder.connect("touched_boulder", func(foo): if foo.will_kill(): _on_die(foo))
+		boulder.connect("touched_boulder", func(bldr): if bldr.will_kill(): _on_die(bldr))
 	print("Connected boulders:", get_tree().get_nodes_in_group("boulder"))
-
 
 func _connect_hud_signals():
 	connect("branch_began", Callable(hud, "_on_branch_began"))
 	connect("branch_finished", Callable(hud, "_on_branch_finished"))
 
-func _on_die(foo):
+func _on_die(killer):
+	if !can_die:
+		return
 	print("DIED")
-	died_rewind = true
+	if ("rewind_death" in killer) and killer.rewind_death:
+		died_rewind = true
+	else:
+		if(GameState.checkpoint_position != null):
+			global_position = GameState.checkpoint_position
+		else:
+			get_tree().reload_current_scene()
 
 func _physics_process(delta):
 	if is_frozen:

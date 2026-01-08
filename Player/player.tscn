@@ -145,3 +145,7 @@ sprite_frames = SubResource("SpriteFrames_f4wda")
 animation = &"run"
 autoplay = "idle"
 frame_progress = 0.751001
+
+[node name="IFrameTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true

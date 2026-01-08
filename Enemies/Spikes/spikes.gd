@@ -10,6 +10,8 @@ extends Area2D
 
 @export var is_top: bool = false
 
+@export var rewind_death: bool = true
+
 # Store original position
 var base_position: Vector2
 @onready var sprite: Sprite2D = $Sprite2D
@@ -40,7 +42,7 @@ func _ready():
 	reset_spikes()
 	
 	auto_extend_timer.wait_time = duration_extended
-	auto_extend_timer.one_shot = false
+	auto_extend_timer.one_shot = true
 	auto_extend_timer.timeout.connect(_on_auto_extend_timer_timeout)
 	
 	auto_retract_timer.wait_time = duration_retracted
@@ -68,7 +70,9 @@ func _on_auto_retract_timer_timeout():
 	auto_extend_timer.start()
 
 func _on_body_entered(body):
-	emit_signal("touched_spike", body)
+	# Only player connected, no need to check if touched body is player
+	# TODO good style this way? Rethink!
+	emit_signal("touched_spike", self)
 
 func reset_spikes():
 	scale.y = 1.0
