@@ -9,7 +9,7 @@ signal branch_began(slot_index)
 signal branch_finished(branch_player, buffer, end_position, slot_index)
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
-@onready var hud = get_node("/root/WorldTest/HUD")
+@onready var hud = find_hud()
 @onready var iframe_timer: Timer = $IFrameTimer
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -356,6 +356,13 @@ func get_wall_direction() -> int:
 		elif collision and collision.get_normal().x < -0.9:
 			return 1 # Wall on right
 	return 0
+
+func find_hud():
+	var root = get_tree().get_root()
+	for child in root.get_children():
+		if child.has_node("HUD"):
+			return child.get_node("HUD")
+	return null
 
 func update_animations(input_axis):
 	var coolcounter := 0
