@@ -1,0 +1,142 @@
+[gd_scene load_steps=11 format=4 uid="uid://ffv2nc7jlqo7"]
+
+[ext_resource type="PackedScene" uid="uid://dvkw2l7qbtexp" path="res://HUD/HUD.tscn" id="1_24c76"]
+[ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="2_cqtt0"]
+[ext_resource type="TileSet" uid="uid://dgp60fa4r1vdi" path="res://World/world-tileset.tres" id="3_0dllp"]
+[ext_resource type="PackedScene" uid="uid://buadottpprvki" path="res://Enemies/Boulder/boulder.tscn" id="6_vb6sq"]
+[ext_resource type="PackedScene" uid="uid://c5765ews0f7ls" path="res://Interactable/door.tscn" id="7_6s6l8"]
+[ext_resource type="PackedScene" uid="uid://bcsnyw4t6pnw2" path="res://World/parallax_background.tscn" id="7_rb54w"]
+[ext_resource type="PackedScene" uid="uid://spgmuyuggu76" path="res://Interactable/sign.tscn" id="8_6s6l8"]
+[ext_resource type="PackedScene" uid="uid://dlgb1cky25vxy" path="res://Interactable/trigger_zone.tscn" id="8_gnr8p"]
+[ext_resource type="PackedScene" uid="uid://cb3pptogrq5rj" path="res://Enemies/Boulder/boulder_stop.tscn" id="9_gnr8p"]
+[ext_resource type="PackedScene" uid="uid://hmixrwpermrr" path="res://Interactable/switch.tscn" id="10_lj7l1"]
+
+[node name="Challenge2" type="Node2D"]
+
+[node name="HUD" parent="." instance=ExtResource("1_24c76")]
+
+[node name="Player" parent="." instance=ExtResource("2_cqtt0")]
+z_index = 1
+position = Vector2(849.5807, 163.85266)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-7, 0)
+limit_left = 0
+limit_top = -100
+limit_right = 3600
+limit_bottom = 240
+position_smoothing_enabled = true
+position_smoothing_speed = 1.0
+rotation_smoothing_enabled = true
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(0, 1)
+tile_map_data = PackedByteArray("AAD//wAAAAAFAAMAAAD//wEAAAAFAAMAAAD//wIAAAAFAAMAAAD//wMAAAAFAAMAAAD//wQAAAAFAAMAAAD//wUAAAAFAAMAAAD//wYAAAAFAAMAAAD//wcAAAAFAAMAAAD//wgAAAAFAAMAAAD//wkAAAAFAAMAAAD//woAAAAFAAMAAAD//wsAAAAFAAMAAAD//wwAAAAFAAMAAAD//w0AAAAFAAMAAAD//w4AAAAFAAMAAAD//w8AAAAFAAMAAAAAAA4AAAABAAEAAAABAA4AAAADAAEAAAACAA4AAAADAAEAAAADAA4AAAADAAEAAAAEAA4AAAADAAEAAAAFAA4AAAADAAEAAAAGAA4AAAADAAEAAAAZAA4AAAADAAEAAAAaAAMAAAALAAcAAAAaAA4AAAADAAEAAAAbAAAAAAABAAMAAAAbAAEAAAABAAMAAAAbAAIAAAABAAMAAAAbAAMAAAABAAMAAAAbAAQAAAABAAoAAAAbAA4AAAADAAEAAAAcAAAAAAADAAMAAAAcAAEAAAADAAMAAAAcAAIAAAADAAMAAAAcAAMAAAADAAMAAAAcAAQAAAACAAoAAAAcAAUAAAACAAsAAAAcAA4AAAADAAEAAAAdAAAAAAADAAMAAAAdAAEAAAADAAMAAAAdAAIAAAAHAAcAAAAdAAMAAAADAAMAAAAdAAQAAAADAAMAAAAdAAUAAAACAAoAAAAdAAYAAAACAAsAAAAdAA4AAAADAAEAAAAeAAAAAAADAAMAAAAeAAEAAAAHAAcAAAAeAAIAAAADAAMAAAAeAAMAAAADAAMAAAAeAAQAAAAFAAcAAAAeAAUAAAADAAMAAAAeAAYAAAADAAMAAAAeAAcAAAABAAoAAAAeAA4AAAADAAEAAAAfAAAAAAADAAMAAAAfAAEAAAADAAMAAAAfAAIAAAADAAMAAAAfAAMAAAAHAAcAAAAfAAQAAAADAAMAAAAfAAUAAAADAAMAAAAfAAYAAAAFAAcAAAAfAAcAAAACAAoAAAAfAAgAAAACAAsAAAAfAA4AAAADAAEAAAAgAAAAAAADAAMAAAAgAAEAAAADAAMAAAAgAAIAAAADAAMAAAAgAAMAAAAHAAcAAAAgAAQAAAADAAMAAAAgAAUAAAADAAMAAAAgAAYAAAADAAMAAAAgAAcAAAADAAMAAAAgAAgAAAADAAMAAAAgAAkAAAABAAoAAAAgAA4AAAADAAEAAAAhAAAAAAADAAMAAAAhAAEAAAADAAMAAAAhAAIAAAADAAMAAAAhAAMAAAADAAMAAAAhAAQAAAADAAMAAAAhAAUAAAAHAAcAAAAhAAYAAAADAAMAAAAhAAcAAAADAAMAAAAhAAgAAAADAAMAAAAhAAkAAAACAAoAAAAhAAoAAAACAAsAAAAhAA4AAAADAAEAAAAiAAAAAAADAAMAAAAiAAEAAAAFAAcAAAAiAAIAAAADAAMAAAAiAAMAAAADAAMAAAAiAAQAAAADAAMAAAAiAAUAAAADAAMAAAAiAAYAAAADAAMAAAAiAAcAAAAHAAcAAAAiAAgAAAADAAMAAAAiAAkAAAADAAMAAAAiAAoAAAADAAUAAAAiAA4AAAADAAEAAAAjAAAAAAADAAMAAAAjAAEAAAADAAMAAAAjAAIAAAADAAMAAAAjAAMAAAAHAAcAAAAjAAQAAAADAAMAAAAjAAUAAAAFAAcAAAAjAAYAAAADAAMAAAAjAAcAAAADAAMAAAAjAAgAAAADAAMAAAAjAAkAAAAHAAcAAAAjAAoAAAADAAUAAAAjAA4AAAADAAEAAAAkAAAAAAADAAMAAAAkAAEAAAAFAAcAAAAkAAIAAAADAAMAAAAkAAMAAAADAAMAAAAkAAQAAAADAAMAAAAkAAUAAAADAAMAAAAkAAYAAAADAAMAAAAkAAcAAAAHAAcAAAAkAAgAAAADAAMAAAAkAAkAAAADAAMAAAAkAAoAAAADAAUAAAAkAA4AAAADAAEAAAAlAAAAAAADAAMAAAAlAAEAAAADAAMAAAAlAAIAAAADAAMAAAAlAAMAAAADAAMAAAAlAAQAAAAHAAcAAAAlAAUAAAAHAAcAAAAlAAYAAAADAAMAAAAlAAcAAAADAAMAAAAlAAgAAAADAAMAAAAlAAkAAAAEAAoAAAAlAAoAAAAEAAsAAAAlAA4AAAADAAEAAAAmAAAAAAADAAMAAAAmAAEAAAADAAMAAAAmAAIAAAAHAAcAAAAmAAMAAAADAAMAAAAmAAQAAAADAAMAAAAmAAUAAAADAAMAAAAmAAYAAAAFAAcAAAAmAAcAAAADAAMAAAAmAAgAAAAEAAoAAAAmAAkAAAAEAAsAAAAmAA4AAAADAAEAAAAnAAAAAAADAAMAAAAnAAEAAAADAAMAAAAnAAIAAAADAAMAAAAnAAMAAAADAAMAAAAnAAQAAAAFAAcAAAAnAAUAAAADAAMAAAAnAAYAAAADAAMAAAAnAAcAAAAEAAoAAAAnAAgAAAAEAAsAAAAnAA4AAAADAAEAAAAoAAAAAAAFAAMAAAAoAAEAAAAFAAMAAAAoAAIAAAAFAAMAAAAoAAMAAAAFAAMAAAAoAAQAAAAFAAMAAAAoAAUAAAAFAAMAAAAoAAYAAAAFAAMAAAAoAAcAAAAFAAoAAAAoAA4AAAADAAEAAAApAAIAAAAJAAcAAAApAAUAAAAJAAcAAAApAA4AAAADAAEAAAAqAA4AAAAWAAEAAAAqAA8AAAAWAAIAAAArAA4AAAAXAAEAAAArAA8AAAAXAAIAAAAHAA4AAAADAAEAAAAIAA4AAAADAAEAAAAJAA4AAAADAAEAAAAKAA4AAAADAAEAAAALAA4AAAADAAEAAAAMAA4AAAADAAEAAAANAA4AAAADAAEAAAAOAA4AAAADAAEAAAAPAA4AAAADAAEAAAAQAA4AAAADAAEAAAARAA4AAAADAAEAAAASAA4AAAADAAEAAAATAA4AAAADAAEAAAAUAA4AAAADAAEAAAAVAA4AAAADAAEAAAAWAA4AAAADAAEAAAAXAA4AAAADAAEAAAAYAA4AAAADAAEAAAAvAA4AAAATAAEAAAAvAA8AAAATAAIAAAAwAA4AAAAUAAEAAAAwAA8AAAAUAAIAAAAxAA0AAAATAAEAAAAxAA4AAAATAAIAAAAyAA0AAAAUAAEAAAAyAA4AAAAUAAIAAAAzAAwAAAATAAEAAAAzAA0AAAATAAIAAAA0AAwAAAAUAAEAAAA0AA0AAAAUAAIAAAA1AAwAAAADAAEAAAA2AAwAAAADAAEAAAA3AAwAAAADAAEAAABJAAYAAAABAAoAAABKAAYAAAACAAoAAABGAAQAAAAJAAEAAABHAAQAAAAKAAEAAABIAAQAAAABAAEAAABIAAUAAAABAAoAAABJAAQAAAADAAEAAABJAAUAAAACAAoAAABKAAQAAAADAAEAAABKAAcAAAABAAoAAABLAAQAAAADAAEAAABLAAcAAAACAAoAAABLAAgAAAACAAsAAABMAAQAAAADAAEAAABMAAkAAAABAAMAAABMAAoAAAABAAMAAABMAAsAAAABAAMAAABMAAwAAAABAAMAAABMAA0AAAABAAMAAABMAA4AAAABAAMAAABMAA8AAAABAAMAAABMABAAAAABAAMAAABMABEAAAABAAMAAABMABIAAAABAAMAAABMABMAAAABAAMAAABNAAQAAAADAAEAAABOAAQAAAADAAEAAABPAAQAAAADAAEAAAA=")
+tile_set = ExtResource("3_0dllp")
+
+[node name="BottomDeathzone" parent="." instance=ExtResource("8_gnr8p")]
+position = Vector2(1457, 384)
+scale = Vector2(150, 1)
+
+[node name="Door" parent="." instance=ExtResource("7_6s6l8")]
+position = Vector2(36, 209)
+
+[node name="TutorialSign" parent="." instance=ExtResource("8_6s6l8")]
+position = Vector2(82, 215)
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("7_rb54w")]
+
+[node name="StonePushZone" type="Node" parent="."]
+
+[node name="TriggerZone" parent="StonePushZone" instance=ExtResource("8_gnr8p")]
+position = Vector2(600, 216)
+scale = Vector2(5, 1)
+player_trigger_threshhold = 2
+
+[node name="PushBoulder" parent="." instance=ExtResource("6_vb6sq")]
+position = Vector2(572, 202)
+mass = 1.5
+gravity_scale = 0.3
+start_frozen = true
+initial_impulse = Vector2(20, -4)
+can_kill = false
+scale_factor = 2.3
+rewind_death = true
+
+[node name="HintSign" parent="." instance=ExtResource("8_6s6l8")]
+position = Vector2(479, 215)
+sign_text = "Some things are just too
+hard to do alone....
+If only you could get 
+someone to help you"
+text_display_time = 4.5
+text_size = 6
+
+[node name="BoulderBridge1" type="Node" parent="."]
+
+[node name="StopBoulder1" parent="BoulderBridge1" instance=ExtResource("9_gnr8p")]
+position = Vector2(975, 250)
+teleport_boulder = true
+delta_pos_y = -250
+
+[node name="FallBoulder1" parent="BoulderBridge1" instance=ExtResource("6_vb6sq")]
+position = Vector2(982, -11)
+mass = 0.09
+gravity_scale = 0.15
+start_frozen = false
+initial_impulse = Vector2(0, 0)
+can_kill = true
+scale_factor = 1.0
+rewind_death = true
+should_lock_rotation = true
+should_clamp_delta_xy = true
+clamp_deltay = -1.0
+
+[node name="BoulderBridge2" type="Node" parent="."]
+
+[node name="StopBoulder2" parent="BoulderBridge2" instance=ExtResource("9_gnr8p")]
+position = Vector2(1054, 250)
+teleport_boulder = true
+delta_pos_y = -250
+
+[node name="FallBoulder2" parent="BoulderBridge2" instance=ExtResource("6_vb6sq")]
+position = Vector2(1061, -11)
+mass = 0.09
+gravity_scale = 0.15
+start_frozen = false
+initial_impulse = Vector2(0, 0)
+can_kill = true
+scale_factor = 1.0
+rewind_death = true
+should_lock_rotation = true
+should_clamp_delta_xy = true
+clamp_deltay = -1.0
+
+[node name="Switch" parent="." instance=ExtResource("10_lj7l1")]
+position = Vector2(853, 185)
+is_toggle = false
+auto_reset_time = 1.0
+invert = true
+
+[node name="Switch2" parent="." instance=ExtResource("10_lj7l1")]
+position = Vector2(886, 186)
+is_toggle = false
+auto_reset_time = 1.0
+invert = true
+
+[node name="Sign" parent="." instance=ExtResource("8_6s6l8")]
+position = Vector2(810, 203)
+sign_text = "These switches appear to
+be time-based....
+If only you had help to re-
+press them when they turn
+off on their own...
+
+Or maybe the  can be activated
+continuously....?"
+text_size = 8
+
+[connection signal="touched_deathzone" from="BottomDeathzone" to="Player" method="_on_die"]
+[connection signal="state_changed" from="StonePushZone/TriggerZone" to="PushBoulder" method="_on_external_trigger"]
+[connection signal="state_changed" from="Switch" to="BoulderBridge1/FallBoulder1" method="_on_external_trigger"]
+[connection signal="state_changed" from="Switch2" to="BoulderBridge2/FallBoulder2" method="_on_external_trigger"]
