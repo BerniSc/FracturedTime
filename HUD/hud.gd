@@ -36,7 +36,7 @@ func _ready():
 		frame.anchor_left = 1
 		frame.offset_right = - (i * (frame_size.x + spacing))
 		frame.offset_left = frame.offset_right - frame_size.x
-		frame.offset_top = 8
+		frame.offset_top = 0
 		frame.offset_bottom = frame.offset_top + frame_size.y
 		frame.pivot_offset = Vector2(frame_size.x/2, 0)
 		var label = frame.find_child("Label")
