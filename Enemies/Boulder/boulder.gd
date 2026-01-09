@@ -13,16 +13,36 @@ signal touched_boulder(boulder)
 
 @export var rewind_death: bool = true
 
+@export_category("Limit")
+@export var should_lock_rotation := false
+@export var should_clamp_delta_xy := false
+# Dont clamp this for negative values
+@export var clamp_deltax := 0.0
+# Dont clamp this for negative values
+@export var clamp_deltay := 0.0
+
 var is_rolling := false
+
+var show_anim := false
 
 func _ready():
 	add_to_group("boulder")
 	freeze_mode = RigidBody2D.FREEZE_MODE_STATIC
 	freeze = start_frozen
 	detector.body_entered.connect(_on_detector_body_entered)
+	lock_rotation = should_lock_rotation
 
 	if scale_factor != 1.0:
 		_apply_scaling()
+
+func _integrate_forces(state):
+	if should_clamp_delta_xy:
+		var lv = state.get_linear_velocity()
+		if clamp_deltax >= 0:
+			lv.x = clamp(lv.x, -clamp_deltax, clamp_deltax)
+		if clamp_deltay >= 0:
+			lv.y = clamp(lv.y, -clamp_deltay, clamp_deltay)
+		state.set_linear_velocity(lv)
 
 func _apply_scaling():
 	var texture_rect = $TextureRect
@@ -78,6 +98,16 @@ func _physics_process(delta):
 		self.is_rolling = true
 	else:
 		is_rolling = false
+		
+	if show_anim == true:
+		spawn_feedback()
+		show_anim = false
+
+func spawn_feedback():
+	var scene_to_spawn = preload("res://Pickups/Feedback/feedback.tscn")
+	var new_scene_instance = scene_to_spawn.instantiate()
+	get_tree().current_scene.add_child(new_scene_instance)  # Add the instance as a child of the current scene
+	new_scene_instance.global_position = global_position
 
 func stop():
 	freeze = true

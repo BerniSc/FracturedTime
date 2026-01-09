@@ -17,5 +17,6 @@ func _on_body_entered(body):
 			if clear_momentum: body.linear_velocity = Vector2(0,0)
 			body.global_position.x += delta_pos_x
 			body.global_position.y += delta_pos_y
+			body.show_anim = true
 		elif body.has_method("stop"):
 			body.stop()
