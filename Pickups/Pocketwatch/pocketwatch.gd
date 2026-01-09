@@ -8,4 +8,5 @@ func spawn_feedback():
 
 func _on_body_entered(body):
 	spawn_feedback()
+	GameState.branch_allowed = true
 	queue_free()

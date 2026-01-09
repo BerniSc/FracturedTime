@@ -8,6 +8,10 @@ signal touched_deathzone(deathzone)
 
 var _player_cnt := 0
 
+@export_category("Area Transition")
+@export var change_area_on_first_trigger := false
+@export var new_area: PackedScene = null
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -29,4 +33,7 @@ func set_state(new_state: bool):
 	current_state = 1.0 if new_state else 0
 	state_changed.emit(current_state)
 	if current_state: 
+		if change_area_on_first_trigger:
+			get_tree().change_scene_to_packed(new_area)
+			return
 		touched_deathzone.emit(self)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://1hds1vlbxd2a"]
+[gd_scene load_steps=11 format=4 uid="uid://1hds1vlbxd2a"]
 
 [ext_resource type="PackedScene" uid="uid://dvkw2l7qbtexp" path="res://HUD/HUD.tscn" id="1_yelck"]
 [ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="2_md4n0"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://uabifvro6ngi" path="res://Interactable/checkpoint_zone.tscn" id="8_00hkn"]
 [ext_resource type="PackedScene" uid="uid://nnh8be6nne5i" path="res://Pickups/Pocketwatch/pocketwatch.tscn" id="8_fknfc"]
 [ext_resource type="PackedScene" uid="uid://c6diiunn70psp" path="res://Pickups/Cheery/cherry.tscn" id="9_e3xg8"]
+[ext_resource type="PackedScene" uid="uid://8gcc5ia4tiok" path="res://World/Rooms/challenge1.tscn" id="10_00hkn"]
 
 [node name="Challenge0_tscn" type="Node2D"]
 
@@ -250,5 +251,11 @@ position = Vector2(1218, 71)
 
 [node name="Cherry" parent="." instance=ExtResource("9_e3xg8")]
 position = Vector2(1199, 56)
+
+[node name="TriggerZone" parent="." instance=ExtResource("7_e3xg8")]
+position = Vector2(1297, 201)
+scale = Vector2(10, 1)
+change_area_on_first_trigger = true
+new_area = ExtResource("10_00hkn")
 
 [connection signal="touched_deathzone" from="SubMapDeath" to="Player" method="_on_die"]
