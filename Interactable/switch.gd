@@ -3,6 +3,7 @@ class_name InteractableSwitch
 
 @export var is_toggle := true
 @export var auto_reset_time := 0.0
+@export var invert := false
 
 @onready var sprite: Sprite2D = $Sprite2D
 var is_activated := false
@@ -10,20 +11,21 @@ var reset_timer := 0.0
 
 func _ready():
 	super._ready()
+	is_activated = invert
 	update_visual()
 
 func _process(delta):
-	if auto_reset_time > 0 and is_activated:
+	if auto_reset_time > 0 and (is_activated if not invert else not is_activated):
 		reset_timer += delta
 		if reset_timer >= auto_reset_time:
-			set_state(false)
+			set_state(invert)
 			reset_timer = 0.0
 
 func _on_interact(player):
 	if is_toggle:
-		set_state(not is_activated)
+		set_state(is_activated if invert else not is_activated)
 	else:
-		set_state(true)
+		set_state(not invert)
 		if auto_reset_time > 0:
 			reset_timer = 0.0
 
