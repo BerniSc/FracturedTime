@@ -15,6 +15,29 @@ func _ready():
 	set_physics_process(true)
 	animated_sprite_2d.modulate.a = 0.5
 
+func spawn_ghost_from_state(state):
+	var ghost_scene = preload("res://Player/player_ghost.tscn")
+	var ghost = ghost_scene.instantiate()
+	ghost.position = state["position"]
+	get_parent().add_child(ghost)
+
+	var anim = animated_sprite_2d.animation
+	var frame = animated_sprite_2d.frame
+	var sprite_frames = animated_sprite_2d.sprite_frames
+	var atlas_tex = sprite_frames.get_frame_texture(anim, frame)
+	var region = Rect2()
+	var texture = null
+
+	if atlas_tex is AtlasTexture:
+		texture = atlas_tex.atlas
+		region = atlas_tex.region
+	else:
+		texture = atlas_tex
+		region = Rect2(Vector2.ZERO, texture.get_size())
+
+	var sprite_offset = animated_sprite_2d.position
+	ghost.call_deferred("setup", texture, region, state["flip_h"], sprite_offset, 0.1)
+
 func _physics_process(delta):
 	if replay_buffer.size() == 0:
 		return
@@ -24,7 +47,6 @@ func _physics_process(delta):
 		if replay_index < 0:
 			replay_index = 0
 			rewinding = false
-
 	else:
 		replay_index += 1
 		if replay_index >= replay_buffer.size():
@@ -37,7 +59,9 @@ func _physics_process(delta):
 	animated_sprite_2d.animation = state["animation"]
 	animated_sprite_2d.flip_h = state["flip_h"]
 
-	if state.has("interact") and state["interact"] and not rewinding:
+	if rewinding:
+		spawn_ghost_from_state(state)
 
+	if state.has("interact") and state["interact"] and not rewinding:
 		print("Flicking switch")
 		state["interact"]._on_interact(self)
