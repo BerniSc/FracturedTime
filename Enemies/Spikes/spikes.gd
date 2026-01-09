@@ -72,7 +72,8 @@ func _on_auto_retract_timer_timeout():
 func _on_body_entered(body):
 	# Only player connected, no need to check if touched body is player
 	# TODO good style this way? Rethink!
-	emit_signal("touched_spike", self)
+	if body.is_in_group("player"):
+		emit_signal("touched_spike", self)
 
 func reset_spikes():
 	scale.y = 1.0

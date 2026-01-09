@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bt8gb54hjkhl1" path="res://Player/player.png" id="2_vtor2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ok28f"]
+size = Vector2(17, 20)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wp3uh"]
 atlas = ExtResource("2_vtor2")
@@ -138,6 +139,7 @@ script = ExtResource("1_1akqa")
 wall_jump_lock_time_sec = 0.9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 0)
 shape = SubResource("RectangleShape2D_ok28f")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
