@@ -104,6 +104,12 @@ func _connect_hud_signals():
 	connect("branch_began", Callable(hud, "_on_branch_began"))
 	connect("branch_finished", Callable(hud, "_on_branch_finished"))
 
+func spawn_feedback():
+	var scene_to_spawn = preload("res://Pickups/Feedback/feedback.tscn")
+	var new_scene_instance = scene_to_spawn.instantiate()
+	get_tree().current_scene.add_child(new_scene_instance)  # Add the instance as a child of the current scene
+	new_scene_instance.global_position = global_position
+
 func _on_die(killer):
 	if !can_die:
 		return
@@ -113,6 +119,7 @@ func _on_die(killer):
 	else:
 		if(GameState.checkpoint_position != null):
 			global_position = GameState.checkpoint_position
+			spawn_feedback()
 		else:
 			get_tree().reload_current_scene()
 
