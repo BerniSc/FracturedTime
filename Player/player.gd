@@ -397,3 +397,7 @@ func update_animations(input_axis):
 	# TODO and is not gliding and is not sliding
 	if not is_on_floor():
 		animated_sprite_2d.play("jump")
+
+
+func _on_sub_map_death_touched_deathzone(deathzone: Variant) -> void:
+	pass # Replace with function body.

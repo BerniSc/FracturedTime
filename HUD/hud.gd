@@ -89,3 +89,7 @@ func _input(event):
 		var key_num = event.keycode - KEY_1
 		if key_num >= 0 and key_num < frame_nodes.size():
 			select_slot(key_num)
+
+
+func on_die(deathzone: Variant) -> void:
+	pass # Replace with function body.

@@ -106,3 +106,7 @@ func _on_change_spikestate(new_state):
 		extend()
 	else:
 		retract()
+
+
+func _on_switch_state_changed(new_state: Variant) -> void:
+	pass # Replace with function body.
