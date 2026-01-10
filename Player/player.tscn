@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://bapvy71043313"]
+[gd_scene load_steps=20 format=3 uid="uid://bapvy71043313"]
 
 [ext_resource type="Script" uid="uid://dugfbu2bxorgw" path="res://Player/player.gd" id="1_1akqa"]
 [ext_resource type="Texture2D" uid="uid://bt8gb54hjkhl1" path="res://Player/player.png" id="2_vtor2"]
+[ext_resource type="AudioStream" uid="uid://3isodb372rba" path="res://Player/Sounds/SFX_Jump_24.wav" id="3_btcbx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ok28f"]
 size = Vector2(17, 20)
@@ -152,3 +153,7 @@ frame_progress = 0.751001
 [node name="IFrameTimer" type="Timer" parent="."]
 one_shot = true
 autostart = true
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_btcbx")
+volume_db = -43.673

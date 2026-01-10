@@ -164,9 +164,11 @@ func _physics_process(delta):
 			velocity.y = JUMP_VELOCITY
 			jmp_cnt = 1
 			last_wall_dir = 0
+			$JumpSound.play()
 		elif enable_double_jmps and jmp_cnt < max_jmps and not is_wall_sliding:
 			velocity.y = JUMP_VELOCITY * 0.75;
 			jmp_cnt += 1
+			$JumpSound.play()
 		elif enable_wall_jump and is_wall_sliding and wall_dir != 0:
 			if wall_dir != last_wall_dir or wall_jump_lock_timer <= 0.0:
 				velocity.y = wall_jump_velocity.y
@@ -180,6 +182,7 @@ func _physics_process(delta):
 				wall_jump_lock_timer = wall_jump_lock_time_sec
 				# Prevent input override
 				wall_jump_input_lock_timer = wall_jump_input_lock_time_sec
+				$JumpSound.play()
 			else:
 				pass
 
@@ -213,6 +216,12 @@ func _physics_process(delta):
 			emit_signal("branch_finished", self, branch_buffer, position, hud.selected_slot)
 			queue_free()
 		return
+
+	# Check for Zoom-Out Request
+	if Input.is_action_pressed("zoom") and GameState.can_zoom:
+		$Camera2D.zoom = Vector2(0.7, 0.7)
+	else:
+		$Camera2D.zoom = Vector2(1, 1)
 
 	# Check for rewind shortcut
 	if Input.is_action_just_pressed("rewind"):
