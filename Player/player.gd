@@ -219,7 +219,7 @@ func _physics_process(delta):
 
 	# Check for Zoom-Out Request
 	if Input.is_action_pressed("zoom") and GameState.can_zoom:
-		$Camera2D.zoom = Vector2(0.7, 0.7)
+		$Camera2D.zoom = Vector2(0.65, 0.65)
 	else:
 		$Camera2D.zoom = Vector2(1, 1)
 
