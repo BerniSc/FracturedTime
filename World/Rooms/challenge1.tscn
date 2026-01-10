@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=4 uid="uid://8gcc5ia4tiok"]
+[gd_scene load_steps=11 format=4 uid="uid://8gcc5ia4tiok"]
 
 [ext_resource type="PackedScene" uid="uid://dvkw2l7qbtexp" path="res://HUD/HUD.tscn" id="1_3s6kl"]
 [ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="2_ew2ba"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://bgm257rotgd2r" path="res://Enemies/Spikes/spikes_dead.tscn" id="6_hjq21"]
 [ext_resource type="PackedScene" uid="uid://buadottpprvki" path="res://Enemies/Boulder/boulder.tscn" id="7_ehnlo"]
 [ext_resource type="PackedScene" uid="uid://dlgb1cky25vxy" path="res://Interactable/trigger_zone.tscn" id="8_oe3hs"]
+[ext_resource type="PackedScene" uid="uid://hmixrwpermrr" path="res://Interactable/switch.tscn" id="9_dakwv"]
+[ext_resource type="AudioStream" uid="uid://dinseoiw5ecvq" path="res://Music/walkyandtalky.ogg" id="10_vjiei"]
 
 [node name="Challenge1" type="Node2D"]
 
@@ -15,7 +17,7 @@
 
 [node name="Player" parent="." instance=ExtResource("2_ew2ba")]
 z_index = 1
-position = Vector2(542.23846, 84.188065)
+position = Vector2(52, 13)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(-7, 0)
@@ -107,4 +109,17 @@ scale_factor = 1.5
 position = Vector2(647, 86)
 is_one_time_use = true
 
+[node name="Switch" parent="." instance=ExtResource("9_dakwv")]
+position = Vector2(161, 214)
+
+[node name="Spikes8" parent="." instance=ExtResource("4_f1bmw")]
+z_index = 1
+position = Vector2(189, 218)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_vjiei")
+volume_db = -50.0
+autoplay = true
+
 [connection signal="state_changed" from="TriggerZone" to="Boulder" method="_on_external_trigger"]
+[connection signal="state_changed" from="Switch" to="Spikes8" method="_on_change_spikestate"]
