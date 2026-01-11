@@ -1,7 +1,7 @@
 # Autoload-Singelton -> Stores gamestate
 extends Node
 
-var branch_allowed = true
+var branch_allowed = false
 var can_zoom := false
 
 var is_debug := false
