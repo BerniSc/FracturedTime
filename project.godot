@@ -13,7 +13,7 @@ config_version=5
 config/name="Fractured Time"
 run/main_scene="uid://1hds1vlbxd2a"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://bf0v6jnb5g1ng"
 
 [autoload]
 
