@@ -17,4 +17,3 @@ offset_left = 3.0
 offset_right = 43.0
 offset_bottom = 23.0
 theme_override_fonts/font = ExtResource("1_f31rt")
-text = "Fractured Time -> TODO Add real text here"
