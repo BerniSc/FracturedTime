@@ -2,6 +2,10 @@ extends CharacterBody2D
 
 signal clone_finished(clone)
 
+@export var replay_file: String = ""
+@export var do_display_replay := true
+@export var invert := false
+
 var replay_buffer = []
 var replay_index = 0
 var rewinding = false
@@ -12,8 +16,19 @@ var slot_idx
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 func _ready():
+	if replay_file != "":
+		load_demo(replay_file)
 	set_physics_process(true)
 	animated_sprite_2d.modulate.a = 0.5
+
+	if invert:
+		replay_index = replay_buffer.size() - 1
+
+func load_demo(filename: String):
+	var file = FileAccess.open(filename, FileAccess.READ)
+	replay_buffer = file.get_var()
+	file.close()
+	replay_index = 0
 
 func spawn_ghost_from_state(state):
 	var ghost_scene = preload("res://Player/player_ghost.tscn")
@@ -47,7 +62,12 @@ func _physics_process(delta):
 		if replay_index < 0:
 			replay_index = 0
 			rewinding = false
+
 	else:
+		if !do_display_replay:
+			rewinding = true
+			replay_index = replay_buffer.size()
+			return
 		replay_index += 1
 		if replay_index >= replay_buffer.size():
 			replay_index = replay_buffer.size() - 1
@@ -59,7 +79,7 @@ func _physics_process(delta):
 	animated_sprite_2d.animation = state["animation"]
 	animated_sprite_2d.flip_h = state["flip_h"]
 
-	if rewinding:
+	if rewinding and do_display_replay:
 		spawn_ghost_from_state(state)
 
 	if state.has("interact") and state["interact"] and not rewinding:
