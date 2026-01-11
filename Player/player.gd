@@ -131,6 +131,11 @@ func _physics_process(delta):
 	if is_frozen:
 		return
 	
+	if Input.is_action_just_pressed("save_demo"):
+		var file = FileAccess.open("Jump", FileAccess.WRITE)
+		file.store_var(state_buffer)
+		file.close()
+
 	if is_rewinding or died_rewind:
 		rewind_step()
 		return
