@@ -1,0 +1,163 @@
+[gd_scene load_steps=9 format=4 uid="uid://b0bx6rlsjj5kn"]
+
+[ext_resource type="TileSet" uid="uid://dgp60fa4r1vdi" path="res://World/world-tileset.tres" id="1_cwuvm"]
+[ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="2_fe73o"]
+[ext_resource type="PackedScene" uid="uid://g0hasfmevnf4" path="res://Player/player_clone.tscn" id="3_icrwq"]
+[ext_resource type="PackedScene" uid="uid://dlgb1cky25vxy" path="res://Interactable/trigger_zone.tscn" id="4_6bn3m"]
+[ext_resource type="PackedScene" uid="uid://mip7jdullk68" path="res://Interactable/hint_scene.tscn" id="5_q011u"]
+[ext_resource type="FontFile" uid="uid://c4hrombsne8wv" path="res://Font/PressStart2P/PressStart2P-Regular.ttf" id="6_d7kbl"]
+[ext_resource type="PackedScene" uid="uid://uabifvro6ngi" path="res://Interactable/checkpoint_zone.tscn" id="7_whdfl"]
+
+[sub_resource type="GDScript" id="GDScript_icrwq"]
+script/source = "extends Node2D
+
+@export var ghosts: Array = []
+@export var zones: Array = []
+
+func _ready():
+	# Connect signals from  trigger zones
+	for zone in zones:
+		var z = get_node(zone)
+		if z:
+			z.state_changed.connect(_on_zone_state_changed.bind(z))
+			
+	for i in range(ghosts.size()):
+		var ghost = get_node(ghosts[i])
+		ghost.visible = false
+
+func _on_zone_state_changed(state, zone):
+	for i in range(ghosts.size()):
+		var ghost = get_node(ghosts[i])
+		var zone_node = get_node(zones[i])
+		if ghost and zone_node:
+			ghost.visible = (zone_node == zone)
+"
+
+[node name="Tutorial1" type="Node2D"]
+script = SubResource("GDScript_icrwq")
+ghosts = [NodePath("JumpReplayer"), NodePath("DoubleJumpReplayer"), NodePath("FloatReplayer"), NodePath("WalljumpReplayer")]
+zones = [NodePath("JumpShow"), NodePath("DoubleJumpShow"), NodePath("FloatShow"), NodePath("WalljumpShow")]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAA4AAAADAAEAAAABAA4AAAADAAEAAAACAA4AAAADAAEAAAADAA4AAAADAAEAAAAEAA4AAAADAAEAAAAFAA4AAAADAAEAAAAGAA4AAAADAAEAAAAHAA4AAAADAAEAAAAIAA4AAAADAAEAAAAJAA4AAAADAAEAAAD//w4AAAAFAAMAAAD//w0AAAAFAAMAAAD//wwAAAAFAAMAAAD//wsAAAAFAAMAAAD//woAAAAFAAMAAAD//wkAAAAFAAMAAAD//wgAAAAFAAMAAAD//wcAAAAFAAMAAAD//wYAAAAFAAMAAAD//wUAAAAFAAMAAAD//wQAAAAFAAMAAAD//wMAAAAFAAMAAAD//wIAAAAFAAMAAAD//wEAAAAFAAMAAAD//wAAAAAFAAMAAAAKAA0AAAAFAAMAAAAKAAwAAAAFAAMAAAAKAAsAAAADAAEAAAAKAA4AAAAFAAUAAAAMAAsAAAADAAEAAAAMAAwAAAAFAAMAAAAMAA0AAAAFAAMAAAAMAA4AAAABAAUAAAANAA4AAAADAAUAAAAOAA4AAAADAAUAAAAPAA4AAAADAAUAAAAQAA4AAAADAAUAAAARAA4AAAADAAUAAAALAAsAAAADAAEAAAALAAwAAAADAAMAAAALAA0AAAADAAMAAAALAA4AAAADAAMAAAASAA4AAAAFAAUAAAASAA0AAAABAAMAAAASAAwAAAABAAMAAAASAAsAAAABAAMAAAASAAoAAAABAAMAAAASAAkAAAABAAMAAAASAAgAAAABAAMAAAASAAcAAAABAAMAAAASAAYAAAABAAEAAAAUAAYAAAAFAAEAAAAUAAcAAAAFAAMAAAAUAAgAAAAFAAMAAAAUAAkAAAAFAAMAAAAUAAoAAAAFAAMAAAAUAAsAAAAFAAMAAAAUAAwAAAAFAAMAAAAUAA0AAAAFAAMAAAAUAA4AAAAFAAMAAAATAAYAAAADAAEAAAAfAAgAAAAPAA4AAAAgAAgAAAARAA4AAAAhAAgAAAATAA4AAAApABIAAAABAAMAAAApABEAAAABAAMAAAApABAAAAABAAMAAAApAA8AAAABAAMAAAApAA4AAAABAAMAAAApAA0AAAABAAMAAAApAAwAAAABAAMAAAApAAsAAAABAAMAAAApAAoAAAABAAMAAAApAAkAAAABAAMAAAApAAgAAAABAAMAAAApAAcAAAABAAMAAAApAAYAAAABAAMAAAApAAUAAAABAAMAAAApAAQAAAABAAMAAAApAAMAAAABAAMAAAAlAAQAAAAFAAMAAAAlAAMAAAAFAAMAAAAlAAIAAAAFAAMAAAAlAAEAAAAFAAMAAAAlAAAAAAAFAAMAAAAlAP//AAAFAAMAAAApAAIAAAABAAMAAAApAAEAAAABAAMAAAApAAAAAAABAAMAAAAlAP7/AAAHAAMAAAAmAP7/AAAIAAUAAAAoAP7/AAAIAAUAAAApAP7/AAABAAEAAAAnAP7/AAAIAAUAAAAqAP7/AAADAAEAAAArAP7/AAADAAEAAAAsAP7/AAADAAEAAAAtAP7/AAADAAEAAAAuAP7/AAADAAEAAAAvAP7/AAADAAEAAAAwAP7/AAADAAEAAAAxAP7/AAADAAEAAAAyAP7/AAADAAEAAAAzAP7/AAADAAEAAAA0AP7/AAADAAEAAAA1AP7/AAABAAEAAAApAP//AAABAAMAAAA=")
+tile_set = ExtResource("1_cwuvm")
+
+[node name="JumpReplayer" parent="." instance=ExtResource("3_icrwq")]
+position = Vector2(28, 17)
+replay_file = "res://World/Tutorial/Replay_Jump"
+do_display_replay = false
+invert = true
+
+[node name="DoubleJumpReplayer" parent="." instance=ExtResource("3_icrwq")]
+position = Vector2(28, 17)
+replay_file = "res://World/Tutorial/Replay_Doublejump"
+do_display_replay = false
+invert = true
+
+[node name="FloatReplayer" parent="." instance=ExtResource("3_icrwq")]
+position = Vector2(28, 17)
+replay_file = "res://World/Tutorial/Replay_Float"
+do_display_replay = false
+invert = true
+
+[node name="WalljumpReplayer" parent="." instance=ExtResource("3_icrwq")]
+position = Vector2(28, 17)
+replay_file = "res://World/Tutorial/Replay_Walljump"
+do_display_replay = false
+invert = true
+
+[node name="Player" parent="." instance=ExtResource("2_fe73o")]
+z_index = 1
+position = Vector2(522.43097, 101.09241)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-7, 0)
+limit_left = 0
+limit_top = -100
+limit_right = 3600
+limit_bottom = 240
+position_smoothing_enabled = true
+position_smoothing_speed = 1.0
+rotation_smoothing_enabled = true
+
+[node name="JumpShow" parent="." instance=ExtResource("4_6bn3m")]
+position = Vector2(48, 213)
+rewind_death = false
+
+[node name="DoubleJumpShow" parent="." instance=ExtResource("4_6bn3m")]
+position = Vector2(177, 134)
+scale = Vector2(0.1, 10)
+rewind_death = false
+
+[node name="FloatShow" parent="." instance=ExtResource("4_6bn3m")]
+position = Vector2(314, 86)
+scale = Vector2(0.1, 10)
+
+[node name="WalljumpShow" parent="." instance=ExtResource("4_6bn3m")]
+position = Vector2(519, 119)
+
+[node name="HintScene" parent="." instance=ExtResource("5_q011u")]
+position = Vector2(92.00001, 172)
+scale = Vector2(5, 5)
+hint_text = "Press 'Space' to Jump"
+sign_font = ExtResource("6_d7kbl")
+text_size = 8
+
+[node name="HintScene2" parent="." instance=ExtResource("5_q011u")]
+position = Vector2(226, 128)
+scale = Vector2(5, 5)
+hint_text = "Press 'Space' twice to Double-Jump"
+sign_font = ExtResource("6_d7kbl")
+text_size = 8
+position_modificator_x = -100
+position_modificator_y = -90
+
+[node name="HintScene3" parent="." instance=ExtResource("5_q011u")]
+position = Vector2(358, 81)
+scale = Vector2(4, 8)
+hint_text = "Hold 'Space' to glide"
+sign_font = ExtResource("6_d7kbl")
+text_size = 8
+position_modificator_x = -100
+position_modificator_y = -90
+
+[node name="HintScene4" parent="." instance=ExtResource("5_q011u")]
+position = Vector2(570, 127)
+scale = Vector2(4, 8)
+hint_duration = 4.0
+hint_text = "Perform Walljumps by
+pressing 'Space' while
+\"hugging\" a wall"
+sign_font = ExtResource("6_d7kbl")
+text_size = 8
+position_modificator_x = -100
+position_modificator_y = -90
+
+[node name="CheckpointZone" parent="." instance=ExtResource("7_whdfl")]
+position = Vector2(301, 85)
+
+[node name="CheckpointZone2" parent="." instance=ExtResource("7_whdfl")]
+position = Vector2(512, 119)
+
+[node name="TriggerZone" parent="." instance=ExtResource("4_6bn3m")]
+position = Vector2(827, 254)
+scale = Vector2(50, 1)
+rewind_death = false
+
+[node name="HintScene5" parent="." instance=ExtResource("5_q011u")]
+position = Vector2(751, -82)
+scale = Vector2(8, 5)
+hint_duration = 5.0
+hint_text = "If you ever find yourself
+stuck or in a jam press 
+'u' to reset"
+sign_font = ExtResource("6_d7kbl")
+text_size = 8
+position_modificator_x = -25
+position_modificator_y = -10
+
+[node name="CheckpointZone3" parent="." instance=ExtResource("7_whdfl")]
+position = Vector2(638, -63)
+scale = Vector2(3, 1)
+
+[connection signal="touched_deathzone" from="TriggerZone" to="Player" method="_on_die"]
