@@ -2,9 +2,15 @@ extends CharacterBody2D
 
 signal clone_finished(clone)
 
+# We set these to reuse the clone as tutorialclone. For the actual player_clone nothing
+# of theese is relevant
 @export var replay_file: String = ""
 @export var do_display_replay := true
 @export var invert := false
+
+@export var use_external_clock: bool = false
+@export var external_clock_path: NodePath
+@export var branch_start_time: float = 0.0
 
 var replay_buffer = []
 var replay_index = 0
@@ -57,16 +63,40 @@ func _physics_process(delta):
 	if replay_buffer.size() == 0:
 		return
 
+	# Just relevant for tutorial_replayer
+	if use_external_clock and external_clock_path != NodePath():
+		var clock_node = get_node_or_null(external_clock_path)
+		if clock_node == null:
+			return
+		var global_replay_time = clock_node.replay_time
+		if global_replay_time < branch_start_time:
+			visible = false
+			replay_index = replay_buffer.size() - 1
+			return
+		visible = true
+		# Count up frames only after branch_start_time
+		#replay_index = int((global_replay_time - branch_start_time) * Engine.get_physics_ticks_per_second())
+		replay_index -= 1
+		if replay_index < 0:
+			replay_index = 0
+		var state = replay_buffer[replay_index]
+		position = state["position"]
+		velocity = state["velocity"]
+		animated_sprite_2d.animation = state["animation"]
+		animated_sprite_2d.flip_h = state["flip_h"]
+		return
+
+
 	if rewinding:
 		replay_index -= 1
 		if replay_index < 0:
 			replay_index = 0
 			rewinding = false
-
 	else:
+		# Just used for tutorial replay clone to not have it rewind optically or do stuff
 		if !do_display_replay:
 			rewinding = true
-			replay_index = replay_buffer.size()
+			replay_index = replay_buffer.size() - 1
 			return
 		replay_index += 1
 		if replay_index >= replay_buffer.size():

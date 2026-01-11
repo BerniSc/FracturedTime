@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://b0bx6rlsjj5kn"]
+[gd_scene load_steps=11 format=4 uid="uid://b0bx6rlsjj5kn"]
 
 [ext_resource type="TileSet" uid="uid://dgp60fa4r1vdi" path="res://World/world-tileset.tres" id="1_cwuvm"]
 [ext_resource type="PackedScene" uid="uid://bapvy71043313" path="res://Player/player.tscn" id="2_fe73o"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://c4hrombsne8wv" path="res://Font/PressStart2P/PressStart2P-Regular.ttf" id="6_d7kbl"]
 [ext_resource type="PackedScene" uid="uid://uabifvro6ngi" path="res://Interactable/checkpoint_zone.tscn" id="7_whdfl"]
 [ext_resource type="PackedScene" uid="uid://c5765ews0f7ls" path="res://Interactable/door.tscn" id="8_f64cf"]
+[ext_resource type="AudioStream" uid="uid://dinseoiw5ecvq" path="res://Music/walkyandtalky.ogg" id="9_f64cf"]
 
 [sub_resource type="GDScript" id="GDScript_icrwq"]
 script/source = "extends Node2D
@@ -173,5 +174,10 @@ new_area_path = "uid://1hds1vlbxd2a"
 [node name="Door2" parent="." instance=ExtResource("8_f64cf")]
 position = Vector2(17, 207)
 new_area_path = "uid://1hds1vlbxd2a"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_f64cf")
+volume_db = -50.0
+autoplay = true
 
 [connection signal="touched_deathzone" from="TriggerZone" to="Player" method="_on_die"]
