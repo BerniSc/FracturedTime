@@ -110,6 +110,13 @@ func spawn_feedback():
 	get_tree().current_scene.add_child(new_scene_instance)  # Add the instance as a child of the current scene
 	new_scene_instance.global_position = global_position
 
+func _die_cp():
+	if(GameState.checkpoint_position != null):
+		global_position = GameState.checkpoint_position
+		spawn_feedback()
+	else:
+		get_tree().reload_current_scene()
+
 func _on_die(killer):
 	if !can_die:
 		return
@@ -117,11 +124,8 @@ func _on_die(killer):
 	if ("rewind_death" in killer) and killer.rewind_death:
 		died_rewind = true
 	else:
-		if(GameState.checkpoint_position != null):
-			global_position = GameState.checkpoint_position
-			spawn_feedback()
-		else:
-			get_tree().reload_current_scene()
+		_die_cp()
+
 
 func _physics_process(delta):
 	if is_frozen:
@@ -192,6 +196,9 @@ func _physics_process(delta):
 				$JumpSound.play()
 			else:
 				pass
+
+	if Input.is_action_just_pressed("reset_to_cp"):
+		_die_cp()
 
 	# Get the input direction (input_axis) and handle the movement/deceleration.
 	var input_axis = Input.get_axis("ui_left", "ui_right")
