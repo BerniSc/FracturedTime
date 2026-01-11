@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Fractured Time"
-run/main_scene="uid://ffv2nc7jlqo7"
+run/main_scene="uid://1hds1vlbxd2a"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
