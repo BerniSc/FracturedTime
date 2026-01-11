@@ -4,7 +4,7 @@ class_name InteractableDoor
 @export var requires_key := false
 @export var key_item_name := "key"
 
-@export var new_area: PackedScene = null
+@export_file("*.tscn") var new_area_path: String = ""
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var status_msg: Label = $StatusMessage
@@ -35,10 +35,21 @@ func _on_area_body_exited(body):
 		player_in_front = false
 		player_ref = null
 
+func get_new_area_scene() -> PackedScene:
+	if new_area_path != "":
+		return load(new_area_path)
+	return null
+
 func _process(delta):
-	if player_in_front and Input.is_action_just_pressed("ui_up") and is_open and new_area != null:
+	if player_in_front and Input.is_action_just_pressed("ui_up") and is_open and new_area_path != "":
 		print("NARNIA")
-		get_tree().change_scene_to_packed(new_area)
+		var scene_root = get_tree().current_scene
+		GameState.set_next_spawn(scene_root.name, player_ref.global_position)
+		GameState.was_door_transition = true
+		var new_area_scene = get_new_area_scene()
+		if new_area_scene:
+			get_tree().change_scene_to_packed(new_area_scene)
+
 
 func _on_interact(player):
 	if requires_key:

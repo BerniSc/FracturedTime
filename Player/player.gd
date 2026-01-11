@@ -86,6 +86,14 @@ func _ready():
 	call_deferred("_connect_hud_signals")
 	iframe_timer.timeout.connect(func(): can_die = true)
 	
+	# If we came through a door check if we are maybe returning. In which case
+	# We want to respawn on where we left
+	if GameState.was_door_transition:
+		GameState.was_door_transition = false
+		var spawn = GameState.get_spawn_for_scene(get_tree().current_scene.name)
+		if spawn != null:
+			global_position = spawn
+
 func _exit_tree():
 	# Reset respawn position when scene is exited
 	GameState.checkpoint_position = null
