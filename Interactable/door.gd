@@ -16,6 +16,7 @@ var player_in_front := false
 var player_ref = null
 
 var is_open := false
+
 func _ready():
 	super._ready()
 	interaction_prompt = "Press F to open door"
@@ -35,7 +36,7 @@ func _on_area_body_exited(body):
 		player_ref = null
 
 func _process(delta):
-	if player_in_front and Input.is_action_just_pressed("ui_up") and new_area != null:
+	if player_in_front and Input.is_action_just_pressed("ui_up") and is_open and new_area != null:
 		print("NARNIA")
 		get_tree().change_scene_to_packed(new_area)
 

@@ -29,6 +29,7 @@ visible = false
 shape = SubResource("RectangleShape2D_xwfky")
 
 [node name="PromptLabel" type="Label" parent="."]
+z_index = 1
 offset_left = -20.0
 offset_top = -33.0
 offset_right = 20.0
