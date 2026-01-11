@@ -139,8 +139,8 @@ func _physics_process(delta):
 	if is_frozen:
 		return
 	
-	if Input.is_action_just_pressed("save_demo"):
-		var file = FileAccess.open("Jump", FileAccess.WRITE)
+	if Input.is_action_just_pressed("save_demo") and GameState.is_debug:
+		var file = FileAccess.open("Jump_"+str(Engine.get_frames_drawn()), FileAccess.WRITE)
 		file.store_var(state_buffer)
 		file.close()
 
@@ -251,7 +251,7 @@ func _physics_process(delta):
 		$Camera2D.zoom = Vector2(1, 1)
 
 	# Check for rewind shortcut
-	if Input.is_action_just_pressed("rewind"):
+	if Input.is_action_just_pressed("rewind") and GameState.is_debug:
 		is_rewinding = true
 	
 	# Branch shortcut (spawn clone)

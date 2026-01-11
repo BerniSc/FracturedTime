@@ -4,6 +4,8 @@ extends Node
 var branch_allowed = true
 var can_zoom := false
 
+var is_debug := false
+
 var checkpoint_position = null
 
 # Set this in a door once we "leave" to it. If it was one we can try restoring the position
