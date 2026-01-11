@@ -15,6 +15,7 @@ func setup(texture: Texture2D, region: Rect2, flip_h: bool, offset: Vector2, sta
 	sprite.flip_h = flip_h
 	sprite.modulate.a = _start_opacity
 	sprite.position = offset
+	sprite.z_index = -1
 
 func _process(delta):
 	elapsed += delta
